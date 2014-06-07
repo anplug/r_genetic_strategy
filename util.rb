@@ -1,13 +1,12 @@
 module Util
 
   def happens_with_probability?(prob)
-    return false if prob <= 0
-    prob = 100 if prob > 100
-    pr = prob / 100.0
-    #randomizer = Random.new_seed
+    raise ArgumentError, 'Negative probability' if prob <= 0
+    return true if prob >= 100
+    prob /= 100.0
     srand
-    #if pr < randomizer.rand
-    if pr < rand
+    r_value = rand
+    if r_value < prob
       true
     else
       false

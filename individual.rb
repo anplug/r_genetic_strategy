@@ -62,10 +62,15 @@ class Individual < GameObject
     @phenotype = phenotype
 
     @need_to_update_sprite = false
-    @target = nil
-    @to_find_food = false
-    @to_find_pair = false
+    @want_to_eat = false
+    @want_to_reproduct = false
     @is_moving = false
+    @current_target = nil
+    @current_search_point = nil
+
+    @just_reproducted = false
+    @iterations_after_reproduct = 0
+
     update_sprite
   end
 
@@ -89,12 +94,37 @@ class Individual < GameObject
   end
 
   def have_business?
-    @to_find_food || @to_find_pair
+    @want_to_eat || @want_to_reproduct
   end
 
   def make_decision
-    check_hungry_status
-    check_reproduction_state
+    set_hungry_status
+    set_reproduction_state
+  end
+
+  def set_hungry_status
+    if @phenotype.satiety <= HUNGRY_BORDER
+      log "Want to eat (#{@phenotype.satiety})" unless @want_to_eat  #talk about food only at first time
+      @want_to_eat = true
+    else
+      @want_to_eat = false
+    end
+  end
+
+  def set_reproduction_state
+    if @phenotype.age >= @genotype.reproductionability
+      if @just_reproducted
+        @want_to_reproduct = false
+        @iterations_after_reproduct += 1
+        if @iterations_after_reproduct == ITERATIONS_AFTER_REPRODUCTING
+          @just_reproducted = false
+          @iterations_after_reproduct = 0
+        end
+      elsif !@want_to_reproduct
+        @want_to_reproduct = true if happens_with_probability? AGE_MUTATION_PROBABILITY
+        log "Want to reproduct (#{@phenotype.age})" if @want_to_reproduct
+      end
+    end
   end
 
   def generate_random_target
@@ -104,7 +134,7 @@ class Individual < GameObject
   end
 
   def process_view
-    return false if !have_business? || target_is_object?
+    return false if target_is_object? #!have_business? || target_is_object?
     food = most_appropriate_food
     pair = most_appropriate_pair
     return false if !food && !pair
@@ -113,14 +143,12 @@ class Individual < GameObject
 
   def set_target(food, pair)
     priority = desire_priority
-    if priority == Food
-      @target = food
-      @target = pair unless @target
+    if priority == Food || priority == nil
+      @target = food || pair
     elsif priority == Individual
-      @target = pair
-      @target = food unless @target
+      @target = pair || food
     else
-      log 'Unsupported target type' #TODO rewrite as exception
+      raise 'Unsupported target type' #TODO rewrite as exception
     end
     log "My target is [#{@target}]"
   end
@@ -128,8 +156,10 @@ class Individual < GameObject
   def desire_priority
     if @phenotype.satiety < STARVING_BORDER
       Food
+    elsif @want_to_reproduct
+      Individual
     else
-      Individual #TODO change
+      nil
     end
   end
 
@@ -165,21 +195,6 @@ class Individual < GameObject
       end
       log 'Need to go'
       @target = generate_random_target
-    end
-  end
-
-  def check_hungry_status
-    if @phenotype.satiety <= HUNGRY_BORDER
-      log "Want to eat (#{@phenotype.satiety})" unless @to_find_food  #talk about food only at first time
-      @to_find_food = true
-    else
-      @to_find_food = false
-    end
-  end
-
-  def check_reproduction_state
-    if @genotype.reproductionability >= @phenotype.age && !@to_reproduct
-      @to_reproduct = true if happens_with_probability? AGE_MUTATION_PROBABILITY
     end
   end
 

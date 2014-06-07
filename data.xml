@@ -1,6 +1,6 @@
 <data>
   <class name="World">
-    <var name="INDIVIDUALS"                 type="Integer">10</var>
+    <var name="INDIVIDUALS"                 type="Integer">1</var>
     <var name="FOOD_POINTS"                 type="Integer">100</var>
   </class>
   <class name="GenWindow">
@@ -18,7 +18,7 @@
     <var name="PALETTE_PATH" 	            type="String">./res/empty.png</var>
     <var name="IMAGE_SIZE" 		            type="Float">50</var>
     <var name="AGE_MUTATION_PROBABILITY" 	type="Float">0.1</var>
-    <var name="ITERATIONS_AFTER_PAIRING" 	type="Integer">10000</var>
+    <var name="ITERATIONS_AFTER_REPRODUCTING" type="Integer">10000</var>
   </class>
   <class name="Phenotype">
     <var name="AGE_INCR" 		            type="Float">0.0001</var>
@@ -31,7 +31,7 @@
     <var name="MAXIMUM_SIZE" 	            type="Float">24.0</var>
     <var name="SIZE_COEFFICIENT" 	        type="Float">5.0</var>
     <var name="DEFAULT_ATTRACTIVENESS" 	    type="Float">1.0</var>
-    <var name="DEFAULT_AGE" 	            type="Float">0.0</var>
+    <var name="DEFAULT_AGE" 	            type="Float">1.0</var>
     <var name="DEFAULT_STRENGTH" 	        type="Float">1.0</var>
     <var name="DEFAULT_SIZE" 	            type="Float">1.0</var>
     <var name="DEFAULT_SPEED" 	            type="Float">2.0</var>
