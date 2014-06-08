@@ -4,6 +4,7 @@ class Food < GameObject
     super(window, world_size, position, PALETTE_PATH)
     @saturation = saturation >= IMAGE_SIZE**2 ? IMAGE_SIZE**2 : saturation
     @eaten = false
+    @owner = nil
     update_sprite
   end
 
@@ -23,13 +24,20 @@ class Food < GameObject
     end
   end
 
+  def get_owner
+    @owner
+  end
+
+  def try_to_eat(pretender)
+    return false if @saturation == 0
+    @owner = pretender
+    eat
+  end
+
   def eat
-    unless @saturation == 0
-      @saturation -= 1
-      @eaten = true
-      return true
-    end
-    false
+    @saturation -= 1
+    @eaten = true
+    true
   end
 
   def update_sprite

@@ -184,17 +184,34 @@ class Individual < GameObject
       log 'Just nothing here'
       @target = nil
     elsif @target.instance_of? Individual
-      # log 'This is my in!'
-      # TODO we need to make new individual here
+      log 'This is individual'
+      reproduction_transaction
+      @target = nil
     elsif @target.instance_of? Food
       log 'This is food point !'
-      if @target.eat
-        log "I got food #{@phenotype.satiety} -->"
-        @phenotype.satiety += FOOD_PER_POINT
-        log "--> #{@phenotype.satiety}"
-      end
+      eat_transaction
       @target = nil
     end
+  end
+
+  def reproduction_transaction
+
+  end
+
+  def eat_transaction
+    owner = @target.get_owner
+    if owner == self || owner == nil || !owner.stronger?(@phenotype.strength)
+      log "Eating #{@target} : #{owner} is weakly" if owner.class == Individual
+      feeding_operation if @target.try_to_eat self
+    else
+      log "Can't eat #{@target} : #{owner} is stronger"
+    end
+  end
+
+  def feeding_operation
+    old_satiety = @phenotype.satiety
+    @phenotype.satiety += FOOD_PER_POINT
+    log "I got food #{old_satiety} --> #{@phenotype.satiety}"
   end
 
   def closest_object(objects_arr)
@@ -227,6 +244,10 @@ class Individual < GameObject
 
   def target_is_object?
     @target && !@target.instance_of?(Position)
+  end
+
+  def stronger?(strength)
+    @phenotype.strength > strength
   end
 
 end

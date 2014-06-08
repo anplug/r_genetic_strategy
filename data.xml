@@ -1,7 +1,7 @@
 <data>
   <class name="World">
-    <var name="INDIVIDUALS"                 type="Integer">1</var>
-    <var name="FOOD_POINTS"                 type="Integer">100</var>
+    <var name="INDIVIDUALS"                 type="Integer">15</var>
+    <var name="FOOD_POINTS"                 type="Integer">10</var>
   </class>
   <class name="GenWindow">
     <var name="BACKGROUND"                  type="Bool">false</var>
@@ -31,7 +31,7 @@
     <var name="MAXIMUM_SIZE" 	            type="Float">24.0</var>
     <var name="SIZE_COEFFICIENT" 	        type="Float">5.0</var>
     <var name="DEFAULT_ATTRACTIVENESS" 	    type="Float">1.0</var>
-    <var name="DEFAULT_AGE" 	            type="Float">1.0</var>
+    <var name="DEFAULT_AGE" 	            type="Float">0.0</var>
     <var name="DEFAULT_STRENGTH" 	        type="Float">1.0</var>
     <var name="DEFAULT_SIZE" 	            type="Float">1.0</var>
     <var name="DEFAULT_SPEED" 	            type="Float">2.0</var>
