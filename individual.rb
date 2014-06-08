@@ -135,8 +135,8 @@ class Individual < GameObject
 
   def process_view
     return false if target_is_object? #!have_business? || target_is_object?
-    food = most_appropriate_food
-    pair = most_appropriate_pair
+    food = most_appropriate_food if @want_to_eat
+    pair = most_appropriate_pair if @want_to_reproduct
     return false if !food && !pair
     set_target food, pair
   end
@@ -193,8 +193,7 @@ class Individual < GameObject
         @phenotype.satiety += FOOD_PER_POINT
         log "--> #{@phenotype.satiety}"
       end
-      log 'Need to go'
-      @target = generate_random_target
+      @target = nil
     end
   end
 

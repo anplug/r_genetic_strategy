@@ -17,7 +17,7 @@
     <var name="FOOD_PER_POINT"              type="Float">0.3</var>
     <var name="PALETTE_PATH" 	            type="String">./res/empty.png</var>
     <var name="IMAGE_SIZE" 		            type="Float">50</var>
-    <var name="AGE_MUTATION_PROBABILITY" 	type="Float">0.1</var>
+    <var name="AGE_MUTATION_PROBABILITY" 	type="Float">1</var>
     <var name="ITERATIONS_AFTER_REPRODUCTING" type="Integer">10000</var>
   </class>
   <class name="Phenotype">
