@@ -6,7 +6,7 @@ class Phenotype
   attr_accessor :satiety
 
   def initialize(color = :white, attractiveness = DEFAULT_ATTRACTIVENESS,
-                 age = DEFAULT_AGE, strength = DEFAULT_STRENGTH,size = DEFAULT_SIZE,
+                 age = DEFAULT_AGE, strength = DEFAULT_STRENGTH, size = DEFAULT_SIZE,
                  speed = DEFAULT_SPEED,view_scope = DEFAULT_VIEW_SCOPE)
     @age = age
     @color = color
@@ -86,6 +86,9 @@ class Phenotype
     @satiety -= (SATIETY_INCR * @size * positive_feed_factor + (is_moving ? SATIETY_INCR : 0))
   end
 
-
+  def set(field, val)
+    command = "@#{field} = #{val}"
+    eval(command)
+  end
 
 end

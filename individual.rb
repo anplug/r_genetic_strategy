@@ -83,7 +83,6 @@ class Individual < GameObject
   end
 
   def update_sprite
-    # TODO: add attractiveness to circle morph
     @sprite = @empty_image.clone
     size = @phenotype.absolute_size
     color = @phenotype.color

@@ -20,4 +20,9 @@ class Genotype
     'genotype'
   end
 
+  def set(field, val)
+    command = "@#{field} = #{val}"
+    eval(command)
+  end
+
 end

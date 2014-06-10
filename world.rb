@@ -3,20 +3,32 @@ require_relative 'position.rb'
 require_relative 'genotype.rb'
 require_relative 'phenotype.rb'
 require_relative 'food.rb'
+#require_relative 'individuals_loader.rb'
 
 class World
   
-  def initialize(window, size)
-    #list of default individuals
-
+  def initialize(window, size, to_load_individuals)
     @size = size
     @window = window
     @individuals = []
     @food_points = []
 
-    add_random_individuals INDIVIDUALS
-    add_random_food_points FOOD_POINTS
+    init_individuals to_load_individuals
+    init_food
+  end
 
+  def init_individuals(to_load_individuals)
+    if to_load_individuals
+      IndividualsLoader.set_window @window
+      IndividualsLoader.set_world_size @size
+      @individuals = IndividualsLoader.load
+    else
+      add_random_individuals(INDIVIDUALS_NUMBER)
+    end
+  end
+
+  def init_food
+    add_random_food_points FOOD_POINTS_NUMBER
   end
 
   def update
