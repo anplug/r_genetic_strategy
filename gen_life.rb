@@ -45,7 +45,7 @@ input_file_name = get_parameter_value('inputFile') || 'data.xml'
 individuals_file = get_parameter_value('individualsFile') || 'individuals.xml'
 interactive_mode = !parameter_present?('nonInteractive')
 to_load_individuals = parameter_present?('loadIndividuals')
-DataLoader.new(input_file_name).load
+DataLoader.load input_file_name
 IndividualsLoader.init(individuals_file)
 window = GenWindow.new interactive_mode, to_load_individuals
 window.show

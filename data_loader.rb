@@ -2,20 +2,16 @@ require 'rexml/document'
 
 class DataLoader
 	include REXML
-	
-	def initialize(file_name)
-		xml_file = File.new file_name
-		doc = Document.new xml_file
-		@root = doc.root
-	end
-	
-	def load
-		@root.elements.each do |cls| 
+
+	def self.load(file_name)
+    xml_file = File.new file_name
+    doc = Document.new xml_file
+    doc.root.elements.each do |cls|
 			cls.each {|elem| insert_record cls, elem }
 		end
 	end
 	
-	def insert_record(cls, elem)
+	def self.insert_record(cls, elem)
 		return false unless elem.instance_of? Element
 		cls_name  = cls.attributes['name']
     name = elem.attributes['name']
@@ -30,12 +26,12 @@ class DataLoader
 		inject_variable cls_name, name, value
 	end
 	
-	def inject_variable(cls_name, name, value)
+	def self.inject_variable(cls_name, name, value)
 		puts "#{cls_name} <-- #{name}=#{value} (#{value.class})"
 		eval(cls_name).const_set(name, value)
   end
 
-  def parse_bool(str)
+  def self.parse_bool(str)
     if str == 'false' || str == 'False'
       false
     else
