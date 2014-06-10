@@ -1,0 +1,40 @@
+<data>
+  <individual>
+    <var name="position">             100 200 </var>
+    <var name="Genotype">
+      <var name="survivability">        2.0     </var>
+      <var name="colorability">         2.0     </var>
+      <var name="sizeability">          1.0     </var>
+      <var name="strenghtability">      2.0     </var>
+      <var name="viewability">          3.0     </var>
+      <var name="reproductionability">  4.0     </var>
+    </var>
+    <var name="Phenotype">
+      <var name="attractiveness">       1.25    </var>
+      <var name="age">                  0.0     </var>
+      <var name="strength">             3.2     </var>
+      <var name="size">                 5.2     </var>
+      <var name="speed">                1.4     </var>
+      <var name="view_scope">           1.4     </var>
+    </var>
+  </individual>
+  <individual>
+    <var name="position">             150:642 </var>
+    <var name="Genotype">
+      <var name="survivability">        2.0     </var>
+      <var name="colorability">         2.0     </var>
+      <var name="sizeability">          1.0     </var>
+      <var name="strenghtability">      2.0     </var>
+      <var name="viewability">          3.0     </var>
+      <var name="reproductionability">  4.0     </var>
+    </var>
+    <var name="Phenotype">
+      <var name="attractiveness">       1.25    </var>
+      <var name="age">                  0.0     </var>
+      <var name="strength">             3.2     </var>
+      <var name="size">                 1.2     </var>
+      <var name="speed">                1.4     </var>
+      <var name="view_scope">           1.4     </var>
+    </var>
+  </individual>
+</data>
