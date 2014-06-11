@@ -20,6 +20,7 @@ class DataLoader
 						elsif 	type == 'Hex' 			then elem.text.to_i(16)
             elsif 	type == 'Integer' 	then elem.text.to_i
             elsif   type == 'Bool'      then parse_bool elem.text
+            elsif   type == 'Color'     then elem.text
 						else 												 		 elem.text
 						end
 				

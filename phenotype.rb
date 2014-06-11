@@ -5,11 +5,11 @@ class Phenotype
   attr_reader :color, :attractiveness, :age, :strength, :size, :speed, :view_scope
   attr_accessor :satiety
 
-  def initialize(color = :white, attractiveness = DEFAULT_ATTRACTIVENESS,
-                 age = DEFAULT_AGE, strength = DEFAULT_STRENGTH, size = DEFAULT_SIZE,
+  def initialize(genotype, attractiveness = DEFAULT_ATTRACTIVENESS, age = DEFAULT_AGE,
+                 strength = DEFAULT_STRENGTH, size = DEFAULT_SIZE,
                  speed = DEFAULT_SPEED,view_scope = DEFAULT_VIEW_SCOPE)
+    @color = genotype.color_gene.generate_real_color
     @age = age
-    @color = color
     @strength = strength
     @size = size
     @speed = speed
@@ -60,14 +60,14 @@ class Phenotype
   end
 
   def update_strength(genotype)
-    @strength += genotype.strengthability * STRENGTH_INCR * negative_feed_factor
+    @strength += genotype.strength_gene * STRENGTH_INCR * negative_feed_factor
   end
 
   def update_size(genotype)
     # TODO : individual's size doesn't have to have restriction
     unless maximum_size?
       prev_size = absolute_size
-      @size += genotype.sizeability * SIZE_INCR * positive_feed_factor
+      @size += genotype.size_gene * SIZE_INCR * positive_feed_factor
       @update_sprite_flag = absolute_size.to_i - prev_size.to_i != 0
     end
   end
@@ -79,7 +79,7 @@ class Phenotype
   end
 
   def update_view_scope(genotype)
-    @view_scope -= VIEW_SCOPE_INCR * (1 / genotype.survivability)
+    @view_scope -= VIEW_SCOPE_INCR * (1 / genotype.survival_gene)
   end
 
   def update_satiety(is_moving)
@@ -89,6 +89,10 @@ class Phenotype
   def set(field, val)
     command = "@#{field} = #{val}"
     eval(command)
+  end
+
+  def self.default(genotype)
+    Phenotype.new genotype
   end
 
 end

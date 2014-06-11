@@ -1,6 +1,6 @@
 <data>
   <class name="World">
-    <var name="INDIVIDUALS_NUMBER"          type="Integer">15</var>
+    <var name="INDIVIDUALS_NUMBER"          type="Integer">1</var>
     <var name="FOOD_POINTS_NUMBER"          type="Integer">10</var>
   </class>
   <class name="GenWindow">
@@ -39,12 +39,12 @@
     <var name="STRENGTH_TO_SIZE_MAX_COEF"   type="Float">0.5</var>
   </class>
   <class name="Genotype">
-    <var name="DEFAULT_SURVIVABILITY" 	    type="Float">1</var>
-    <var name="DEFAULT_COLORABILITY" 	    type="Float">1</var>
-    <var name="DEFAULT_SIZEABILITY" 	    type="Float">1</var>
-    <var name="DEFAULT_STRENGTHABILITY" 	type="Float">1</var>
-    <var name="DEFAULT_VIEWABILITY" 	    type="Float">1</var>
-    <var name="DEFAULT_REPRODUCTIONABILITY" type="Float">1</var>
+    <var name="DEFAULT_SURVIVAL_GENE"       type="Float">1</var>
+    <var name="DEFAULT_COLOR_GENE" 	        type="Color">green</var>
+    <var name="DEFAULT_SIZE_GENE" 	        type="Float">1</var>
+    <var name="DEFAULT_STRENGTH_GENE" 	    type="Float">1</var>
+    <var name="DEFAULT_SIGHT_GENE" 	        type="Float">1</var>
+    <var name="DEFAULT_REPRODUCTION_GENE"   type="Float">1</var>
   </class>
   <class name="Food">
     <var name="PALETTE_PATH" 	            type="String">./res/empty_food.png</var>

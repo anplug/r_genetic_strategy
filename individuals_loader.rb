@@ -54,7 +54,7 @@ class IndividualsLoader
   end
 
   def self.parse_phenotype(phenotype_elem)
-    phenotype = Phenotype.new
+    phenotype = Phenotype.new @genotype
     phenotype_elem.each do |var|
       if var.class != REXML::Text
         phenotype.set(var.attributes['name'], var.text.to_f)

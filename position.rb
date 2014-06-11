@@ -1,3 +1,5 @@
+require_relative 'size.rb'
+
 class Position
   attr_accessor :x, :y
 
@@ -17,11 +19,11 @@ class Position
   def move(target, speed)
     target = get_real_position target
     x_ratio = if (target.y - @y) == 0 then 1
-			  else 						  (target.x - @x) / (target.y - @y).abs
-			  end
+			        else                         (target.x - @x) / (target.y - @y).abs
+			        end
 		y_ratio = if (target.x - @x) == 0 then 1
-			  else 						  (target.y - @y) / (target.x - @x).abs
-			  end
+			        else                         (target.y - @y) / (target.x - @x).abs
+			        end
     if x_ratio.abs > y_ratio.abs
       x_ratio /= x_ratio.abs
       y_ratio /= x_ratio.abs
@@ -45,5 +47,14 @@ class Position
       pos.position
     end
   end
+
+  def self.inject_size(size)
+    @size = size
+  end
+
+  def self.random
+    Position.new(Random.rand(@size.w), Random.rand(@size.h))
+  end
+
 
 end

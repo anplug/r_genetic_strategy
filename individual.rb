@@ -111,7 +111,7 @@ class Individual < GameObject
   end
 
   def set_reproduction_state
-    if @phenotype.age >= @genotype.reproductionability
+    if @phenotype.age >= @genotype.reproduction_gene
       if @just_reproducted
         @want_to_reproduct = false
         @iterations_after_reproduct += 1

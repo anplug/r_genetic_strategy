@@ -8,6 +8,7 @@ require_relative 'food.rb'
 class World
   
   def initialize(window, size, to_load_individuals)
+    Position.inject_size(size)
     @size = size
     @window = window
     @individuals = []
@@ -58,8 +59,10 @@ class World
 
   def add_random_individuals(count)
     count.times do
-      @individuals << Individual.new(@window, @size, Position.new(
-                        Random.rand(@size.w), Random.rand(@size.h)), Genotype.new, Phenotype.new)
+      genotype = Genotype.default
+      phenotype = Phenotype.default genotype
+      position = Position.random
+      @individuals << Individual.new(@window, @size, position, genotype, phenotype)
     end
   end
 
