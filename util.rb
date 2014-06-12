@@ -13,6 +13,10 @@ module Util
     end
   end
 
+  def rand_in_range(min, max)
+    rand * (max - min) + min
+  end
+
   def parameter_present?(parameter)
     ARGV.include? parameter
   end

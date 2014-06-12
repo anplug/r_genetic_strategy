@@ -3,6 +3,8 @@ require_relative 'util.rb'
 class ColorGene
   include Util
 
+  attr_reader :colors
+
   @available_colors = [:red, :green, :blue]
 
   def initialize(color1, color2=color1)
@@ -25,9 +27,18 @@ class ColorGene
     end
   end
 
-  def self.default(color)
-    sym_color = symbolic_representation color
-    self.new sym_color
+  def contains?(color1, color2)
+    (@colors[0] == color1 && @colors[1] == color2) || (@colors[1] == color1 && @colors[0] == color2)
+  end
+
+
+  def self.init(color_string)
+    colors = color_string.split
+    if colors.size >= 2
+      new symbolic_representation(colors[0]), symbolic_representation(colors[1])
+    else
+      new symbolic_representation(colors.first)
+    end
   end
 
   def self.symbolic_representation(color_string)
@@ -36,8 +47,8 @@ class ColorGene
     result
   end
 
-  def contains?(color1, color2)
-    (@colors[0] == color1 && @colors[1] == color2) || (@colors[1] == color1 && @colors[0] == color2)
+  def self.cross(gene1, gene2)
+    ColorGene.new gene1.colors.sample, gene2.colors.sample
   end
 
 end

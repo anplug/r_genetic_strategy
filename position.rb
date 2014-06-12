@@ -9,13 +9,13 @@ class Position
   end
   
   def to_s
-    "{#{@x.round}:#{@y.round}}"
+    "{#{@x.round}:#{@y.round}}" # А этот эксепшен совсем не был в моих планах. Могу только надееться что на защите такое не произойдёт
   end
-  
+
   def range(pos)
     (((x - pos.x).abs ** 2) + ((y - pos.y).abs ** 2) ** 0.5)
   end
-  
+
   def move(target, speed)
     target = get_real_position target
     x_ratio = if (target.y - @y) == 0 then 1

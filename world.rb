@@ -14,6 +14,8 @@ class World
     @individuals = []
     @food_points = []
 
+    @new_individuals = []
+
     init_individuals to_load_individuals
     init_food
   end
@@ -33,12 +35,17 @@ class World
   end
 
   def update
+    update_individuals_list
     @individuals.each do |ind|
       ind.set_near_individuals(near_individuals ind)
       ind.set_near_food(near_food ind)
       ind.update
-    @food_points.each {|fp| fp.update}
+      reproduction_pair = ind.get_reproduction_pair
+      if reproduction_pair
+        generate_new_individual reproduction_pair
+      end
     end
+    @food_points.each {|fp| fp.update}
     @food_points = @food_points.find_all {|fp| !fp.empty?}
   end
 
@@ -69,6 +76,20 @@ class World
   def add_random_food_points(count)
     count.times do
       @food_points << Food.new(@window, @size, Position.new(Random.rand(@size.w), Random.rand(@size.h)))
+    end
+  end
+
+  def generate_new_individual(pair)
+    genotype = Genotype.genotype_crossing(pair[0].genotype, pair[1].genotype)
+    phenotype = Phenotype.default genotype
+    position = Position.new(pair.first.position.x, pair.first.position.y)
+    @new_individuals << Individual.new(@window, @size, position, genotype, phenotype)
+  end
+
+  def update_individuals_list
+    unless @new_individuals.empty?
+      @individuals += @new_individuals
+      @new_individuals = []
     end
   end
 

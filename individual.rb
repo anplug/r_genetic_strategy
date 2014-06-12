@@ -10,7 +10,7 @@ class Individual < GameObject
 
   include Util
 
-  attr_reader :genotype, :phenotype, :need_to_update_sprite
+  attr_reader :genotype, :phenotype, :need_to_update_sprite, :reproduction_pair
 
   def self.new(*args, &block)
     @index ||= -1
@@ -30,10 +30,14 @@ class Individual < GameObject
 #  end
 
   def update
-    make_decision
-    process_view
-    is_moving = moving
-    @phenotype.update @genotype, is_moving
+    if !in_reproduction?
+      make_decision
+      process_view
+      @is_moving = moving
+    else
+      @is_moving = false
+    end
+    @phenotype.update @genotype, @is_moving
     update_sprite if @phenotype.update_sprite?
   end
 
@@ -53,6 +57,26 @@ class Individual < GameObject
     end
   end
 
+  def reproduction_proposal(pair)
+    if suitable_individual pair
+      log 'Im passive!'
+      @passive = true
+      @pair = pair
+      @in_reproduction = true
+      true
+    else
+      false
+    end
+  end
+
+  def get_reproduction_pair
+    return nil if @reproduction_pair.empty?
+    temp = @reproduction_pair
+    @reproduction_pair = []
+    return temp
+  end
+
+
   protected
 
   def initialize(id, window, world_size, position, genotype, phenotype)
@@ -69,7 +93,14 @@ class Individual < GameObject
     @current_search_point = nil
 
     @just_reproducted = false
-    @iterations_after_reproduct = 0
+    @iterations_after_reproduction = 0
+
+    @in_reproduction = false
+    @iterations_in_reproduction = 0
+    @reproduction_pair = []
+
+    @active = false
+    @passive = false
 
     update_sprite
   end
@@ -106,18 +137,17 @@ class Individual < GameObject
       log "Want to eat (#{@phenotype.satiety})" unless @want_to_eat  #talk about food only at first time
       @want_to_eat = true
     else
-      @want_to_eat = false
+      @want_to_eat = false # Не хочет есть
     end
   end
 
   def set_reproduction_state
-    if @phenotype.age >= @genotype.reproduction_gene
-      if @just_reproducted
-        @want_to_reproduct = false
-        @iterations_after_reproduct += 1
-        if @iterations_after_reproduct == ITERATIONS_AFTER_REPRODUCTING
+    if @phenotype.age > @genotype.reproduction_gene
+      if @just_reproducted #только что размножалась, и соответсвенно больше не хочет (сейчас)
+        @iterations_after_reproduction += 1
+        if @iterations_after_reproduction == ITERATIONS_AFTER_REPRODUCTING
           @just_reproducted = false
-          @iterations_after_reproduct = 0
+          @iterations_after_reproduction = 0
         end
       elsif !@want_to_reproduct
         @want_to_reproduct = true if happens_with_probability? AGE_MUTATION_PROBABILITY
@@ -133,7 +163,7 @@ class Individual < GameObject
   end
 
   def process_view
-    return false if target_is_object? #!have_business? || target_is_object?
+    return false if target_is_object? || !have_business?
     food = most_appropriate_food if @want_to_eat
     pair = most_appropriate_pair if @want_to_reproduct
     return false if !food && !pair
@@ -147,7 +177,7 @@ class Individual < GameObject
     elsif priority == Individual
       @target = pair || food
     else
-      raise 'Unsupported target type' #TODO rewrite as exception
+      raise ArgumentError, 'Unsupported target type'
     end
     log "My target is [#{@target}]"
   end
@@ -184,7 +214,7 @@ class Individual < GameObject
       @target = nil
     elsif @target.instance_of? Individual
       log 'This is individual'
-      reproduction_transaction
+      reproduction_stage
       @target = nil
     elsif @target.instance_of? Food
       log 'This is food point !'
@@ -193,8 +223,22 @@ class Individual < GameObject
     end
   end
 
-  def reproduction_transaction
-
+  def reproduction_stage
+    log 'Here, reproduction stage!'
+    unless @passive
+      log 'Im active!'
+      @active = true
+      answer = @target.reproduction_proposal self
+      if answer
+        @pair = @target
+        @in_reproduction = true
+      else
+        log "Reproduction rejected from #{@target}"
+        @active = false
+      end
+    else
+      log "Have proposal from #{@target}"
+    end
   end
 
   def eat_transaction
@@ -247,6 +291,33 @@ class Individual < GameObject
 
   def stronger?(strength)
     @phenotype.strength > strength
+  end
+
+  def suitable_individual(potential_pair)
+    if @want_to_reproduct
+      true
+    else
+      false
+    end
+  end
+
+  def in_reproduction?
+    return false unless @in_reproduction
+    @iterations_in_reproduction += 1
+    if @iterations_in_reproduction == REPRODUCTION_PHASE_TIME
+      if @active  #real pair generating only at end of reproduction
+        @reproduction_pair = [self, @pair]
+      end
+      @pair = nil
+      @want_to_reproduct = false
+      @just_reproducted = true
+      @in_reproduction = false
+      @iterations_in_reproduction = 0
+      @active = false
+      @passive = false
+      log "Finished reproduction"
+    end
+    true
   end
 
 end
