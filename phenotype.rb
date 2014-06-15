@@ -1,4 +1,5 @@
 require_relative 'genotype.rb'
+require_relative 'dying_from_starving.rb'
 
 class Phenotype
 
@@ -37,7 +38,7 @@ class Phenotype
   end
 
   def positive_feed_factor
-    (@satiety**3).abs/1.0
+    negative_feed_factor.abs
   end
 
   def negative_feed_factor
@@ -67,7 +68,9 @@ class Phenotype
     # TODO : individual's size doesn't have to have restriction
     unless maximum_size?
       prev_size = absolute_size
-      @size += genotype.size_gene * SIZE_INCR * positive_feed_factor
+      feed_factor = positive_feed_factor
+      val = genotype.size_gene * SIZE_INCR * feed_factor
+      @size += val
       @update_sprite_flag = absolute_size.to_i - prev_size.to_i != 0
     end
   end
@@ -83,6 +86,10 @@ class Phenotype
   end
 
   def update_satiety(is_moving)
+    if @satiety <= 0
+      @satiety = 0
+      raise DyingFromStarving
+    end
     @satiety -= (SATIETY_INCR * @size * positive_feed_factor + (is_moving ? SATIETY_INCR : 0))
   end
 

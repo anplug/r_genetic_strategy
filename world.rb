@@ -15,6 +15,7 @@ class World
     @food_points = []
 
     @new_individuals = []
+    @dead_individuals = []
 
     init_individuals to_load_individuals
     init_food
@@ -43,6 +44,9 @@ class World
       reproduction_pair = ind.get_reproduction_pair
       if reproduction_pair
         generate_new_individual reproduction_pair
+      end
+      if ind.is_dead
+        kill_individual ind
       end
     end
     @food_points.each {|fp| fp.update}
@@ -86,10 +90,18 @@ class World
     @new_individuals << Individual.new(@window, @size, position, genotype, phenotype)
   end
 
+  def kill_individual(ind)
+    @dead_individuals << ind
+  end
+
   def update_individuals_list
-    unless @new_individuals.empty?
+    if @new_individuals.any?
       @individuals += @new_individuals
       @new_individuals = []
+    end
+    if @dead_individuals.any?
+      @individuals - @dead_individuals
+      @dead_individuals = []
     end
   end
 

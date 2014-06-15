@@ -10,7 +10,8 @@ class Individual < GameObject
 
   include Util
 
-  attr_reader :genotype, :phenotype, :need_to_update_sprite, :reproduction_pair
+  attr_reader :genotype, :phenotype, :need_to_update_sprite,
+              :reproduction_pair, :is_dead
 
   def self.new(*args, &block)
     @index ||= -1
@@ -22,7 +23,7 @@ class Individual < GameObject
   end
 
   def to_s
-    "<#{@id} at #{@position}>"
+    "<#{@id} at #{@position}>:#{@phenotype.size}"
   end
 
 #  def inspect
@@ -39,6 +40,9 @@ class Individual < GameObject
     end
     @phenotype.update @genotype, @is_moving
     update_sprite if @phenotype.update_sprite?
+  rescue DyingFromStarving
+    @is_dead = true
+
   end
 
   def set_near_individuals(near_individuals)
@@ -76,7 +80,6 @@ class Individual < GameObject
     return temp
   end
 
-
   protected
 
   def initialize(id, window, world_size, position, genotype, phenotype)
@@ -101,6 +104,8 @@ class Individual < GameObject
 
     @active = false
     @passive = false
+
+    @is_dead = false
 
     update_sprite
   end

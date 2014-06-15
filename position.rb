@@ -9,7 +9,9 @@ class Position
   end
   
   def to_s
-    "{#{@x.round}:#{@y.round}}" # А этот эксепшен совсем не был в моих планах. Могу только надееться что на защите такое не произойдёт
+    "{#{@x.round}:#{@y.round}}"
+  rescue
+    puts @x, @y
   end
 
   def range(pos)

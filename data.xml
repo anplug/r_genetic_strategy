@@ -6,7 +6,7 @@
   <class name="GenWindow">
     <var name="BACKGROUND"                  type="Bool">false</var>
     <var name="BACKGROUND_COLOR"            type="Hex">0xff991100</var> TODO
-    <var name="FPS" 			            type="Float">30</var>
+    <var name="FPS" 			            type="Float">100</var>
     <var name="WINDOW_CAPTION" 	            type="String">GenSimulating</var>
     <var name="WINDOW_WIDTH" 	            type="Integer">1000</var>
     <var name="WINDOW_HEIGHT" 	            type="Integer">700</var>
