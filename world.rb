@@ -100,7 +100,7 @@ class World
       @new_individuals = []
     end
     if @dead_individuals.any?
-      @individuals - @dead_individuals
+      @individuals -= @dead_individuals
       @dead_individuals = []
     end
   end

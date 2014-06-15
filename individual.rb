@@ -23,7 +23,7 @@ class Individual < GameObject
   end
 
   def to_s
-    "<#{@id} at #{@position}>:#{@phenotype.size}"
+    "<#{@id} at #{@position}>:#{@phenotype.satiety}"
   end
 
 #  def inspect
@@ -142,13 +142,13 @@ class Individual < GameObject
       log "Want to eat (#{@phenotype.satiety})" unless @want_to_eat  #talk about food only at first time
       @want_to_eat = true
     else
-      @want_to_eat = false # Не хочет есть
+      @want_to_eat = false
     end
   end
 
   def set_reproduction_state
     if @phenotype.age > @genotype.reproduction_gene
-      if @just_reproducted #только что размножалась, и соответсвенно больше не хочет (сейчас)
+      if @just_reproducted
         @iterations_after_reproduction += 1
         if @iterations_after_reproduction == ITERATIONS_AFTER_REPRODUCTING
           @just_reproducted = false
@@ -249,10 +249,10 @@ class Individual < GameObject
   def eat_transaction
     owner = @target.get_owner
     if owner == self || owner == nil || !owner.stronger?(@phenotype.strength)
-      log "Eating #{@target} : #{owner} is weakly" if owner.class == Individual
+      log "Eating #{@target}" #: #{owner} is weakly" if owner.class == Individual
       feeding_operation if @target.try_to_eat self
     else
-      log "Can't eat #{@target} : #{owner} is stronger"
+      #log "Can't eat #{@target} : #{owner} is stronger"
     end
   end
 
