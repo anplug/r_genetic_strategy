@@ -15,7 +15,7 @@ class GameObject
   end
 
   def log(message)
-    puts "#{self} #{message}"
+    #puts "#{self} #{message}"
   end
 
   def range(obj)

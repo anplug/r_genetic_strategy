@@ -47,12 +47,12 @@ class Food < GameObject
     last_line_length = self.last_line_length
     full_lines.times do |index|
       @sprite.paint{
-        line(0, index, IMAGE_SIZE - 1, index)
+        line(0, index, IMAGE_SIZE - 1, index, :color => :black)
       }
     end
     if last_line_length != 0
       @sprite.paint{
-        line(0, full_lines, last_line_length - 1, full_lines)
+        line(0, full_lines, last_line_length - 1, full_lines, :color => :black)
       }
     end
   end
