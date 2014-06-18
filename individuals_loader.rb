@@ -1,7 +1,9 @@
 require 'rexml/document'
+require_relative 'util.rb'
 
 class IndividualsLoader
   include REXML
+  include Util
 
   def self.init(file_name)
     xml_file = File.new file_name
@@ -26,7 +28,7 @@ class IndividualsLoader
   def self.parse_individual(individual_elem)
 #   return false unless elem.instance_of? Element
     individual_elem.elements.each { |element| parse_element element }
-    @individuals << Individual.new(@window, @world_size, @position, @genotype, @phenotype)
+    @individuals << create_individual(@window, @world_size, @position, @genotype, @phenotype)
     clear_temp
   end
 

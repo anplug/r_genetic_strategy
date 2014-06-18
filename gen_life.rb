@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'gosu'
 require_relative 'data_loader.rb'
 require_relative 'world.rb'
@@ -40,6 +41,8 @@ class GenWindow < Gosu::Window
   end
 
 end
+
+File.delete("statistics") rescue false
 
 input_file_name = get_parameter_value('inputFile') || 'data.xml'
 individuals_file = get_parameter_value('individualsFile') || 'individuals.xml'

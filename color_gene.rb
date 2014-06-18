@@ -7,6 +7,10 @@ class ColorGene
 
   @available_colors = [:red, :green, :blue]
 
+  def to_s
+    "#{@colors[0].to_s}-#{@colors[1].to_s}"
+  end
+
   def initialize(color1, color2=color1)
     color1 = symbolic_representation color1 unless color1.instance_of? Symbol
     color2 = symbolic_representation color2 unless color2.instance_of? Symbol

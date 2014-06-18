@@ -1,11 +1,11 @@
 <data>
   <class name="World">
-    <var name="INDIVIDUALS_NUMBER"          type="Integer">100</var>
+    <var name="INDIVIDUALS_NUMBER"          type="Integer">30</var>
     <var name="FOOD_POINTS_NUMBER"          type="Integer">500</var>
   </class>
   <class name="GenWindow">
-    <var name="BACKGROUND"                  type="Bool">false</var>
-    <var name="BACKGROUND_COLOR"            type="Hex">0xff991100</var> TODO
+    <var name="BACKGROUND"                  type="Bool">true</var>
+    <var name="BACKGROUND_COLOR"            type="Hex">0xff05413a</var>
     <var name="FPS" 			            type="Float">100</var>
     <var name="WINDOW_CAPTION" 	            type="String">GenSimulating</var>
     <var name="WINDOW_WIDTH" 	            type="Integer">1000</var>
@@ -22,12 +22,12 @@
     <var name="REPRODUCTION_PHASE_TIME" 	type="Integer">250</var>
   </class>
   <class name="Phenotype">
-    <var name="AGE_INCR" 		            type="Float">0.0001</var>
+    <var name="AGE_INCR" 		            type="Float">0.001</var>
     <var name="STRENGTH_INCR" 	            type="Float">0.0001</var>
-    <var name="SIZE_INCR" 		            type="Float">0.0001</var>
-    <var name="SPEED_INCR" 		            type="Float">0.0</var>
+    <var name="SIZE_INCR" 		            type="Float">0.001</var>
+    <var name="SPEED_INCR" 		            type="Float">0.0001</var>
     <var name="VIEW_SCOPE_INCR"	            type="Float">0.0001</var>
-    <var name="SATIETY_INCR" 	            type="Float">0.001</var>
+    <var name="SATIETY_INCR" 	            type="Float">0.0004</var>
     <var name="INITIAL_SATIETY" 	        type="Float">0.8</var>
     <var name="MAXIMUM_SIZE" 	            type="Float">24.0</var>
     <var name="SIZE_COEFFICIENT" 	        type="Float">5.0</var>

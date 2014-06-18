@@ -30,4 +30,15 @@ module Util
     nil
   end
 
+  def create_individual(window, size, position, genotype, phenotype)
+    result = Individual.new(window, size, position, genotype, phenotype)
+    write_statistic result
+    result
+  end
+
+  def write_statistic(individual)
+    file = File.new "statistics", "a+"
+    file.puts individual.info
+  end
+
 end

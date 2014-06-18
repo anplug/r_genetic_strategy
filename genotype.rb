@@ -23,6 +23,17 @@ class Genotype
     'Genotype'
   end
 
+  def info
+    <<-DOC
+        strength_gene     = #{@strength_gene.round 3}
+        sight_gene        = #{@sight_gene.round 3}
+        survival_gene     = #{@survival_gene.round 3}
+        reproduction_gene = #{@reproduction_gene.round 3}
+        size_gene         = #{@size_gene.round 3}
+        color             = #{@color_gene}
+    DOC
+  end
+
   def set(field, val)
     if field == 'color_gene'
       @color_gene = ColorGene.init val

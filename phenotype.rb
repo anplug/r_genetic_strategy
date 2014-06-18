@@ -82,7 +82,7 @@ class Phenotype
   end
 
   def update_view_scope(genotype)
-    @view_scope -= VIEW_SCOPE_INCR * (1 / genotype.survival_gene)
+    @view_scope -= VIEW_SCOPE_INCR * (1 / genotype.sight_gene)
   end
 
   def update_satiety(is_moving)

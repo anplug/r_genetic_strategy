@@ -26,9 +26,18 @@ class Individual < GameObject
     "<#{@id} at #{@position}>:#{@phenotype.satiety}"
   end
 
-#  def inspect
-#    "#{@id}, #{@position}, #{@genotype}, #{@phenotype}"
-#  end
+  def info
+    "Individual #{@id}:\t#{fitness_function}\n#{@genotype.info}"
+  end
+
+  def fitness_function
+    result =  @genotype.strength_gene     * 0.35 +
+              @genotype.sight_gene        * 0.30 +
+              @genotype.survival_gene     * 0.20 +
+              @genotype.reproduction_gene * 0.10 +
+              @genotype.size_gene         * 0.05
+    result / 5
+  end
 
   def update
     if !in_reproduction?
