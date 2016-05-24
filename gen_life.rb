@@ -1,9 +1,9 @@
 require 'gosu'
-require_relative 'data_loader.rb'
-require_relative 'world.rb'
-require_relative 'size.rb'
-require_relative 'util.rb'
-require_relative 'individuals_loader.rb'
+require_relative 'app/data_loader.rb'
+require_relative 'app/world.rb'
+require_relative 'app/size.rb'
+require_relative 'app/util.rb'
+require_relative 'app/individuals_loader.rb'
 
 include Util
 
@@ -42,8 +42,8 @@ end
 
 File.delete("statistics") rescue false
 
-input_file_name = get_parameter_value('inputFile') || 'data.xml'
-individuals_file = get_parameter_value('individualsFile') || 'individuals.xml'
+input_file_name = get_parameter_value('inputFile') || 'data/data.xml'
+individuals_file = get_parameter_value('individualsFile') || 'data/individuals.xml'
 interactive_mode = !parameter_present?('nonInteractive')
 to_load_individuals = parameter_present?('loadIndividuals')
 DataLoader.load input_file_name
