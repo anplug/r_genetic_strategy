@@ -66,5 +66,4 @@ class Food < GameObject
   def last_line_length
     @saturation % IMAGE_SIZE
   end
-
 end

@@ -54,5 +54,4 @@ class ColorGene
   def self.cross(gene1, gene2)
     ColorGene.new gene1.colors.sample, gene2.colors.sample
   end
-
 end

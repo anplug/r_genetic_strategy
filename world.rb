@@ -64,7 +64,7 @@ class World
     near_food = @food_points.find_all {|fp| individual.in_view_scope? fp}
     near_food.empty? ? nil : near_food
   end
-  
+
   def draw
     @individuals.each {|ind| ind.draw}
     @food_points.each {|fp| fp.draw}
@@ -106,5 +106,4 @@ class World
       @dead_individuals = []
     end
   end
-
 end

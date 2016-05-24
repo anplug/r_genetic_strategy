@@ -10,7 +10,7 @@ class DataLoader
 			cls.each {|elem| insert_record cls, elem }
 		end
 	end
-	
+
 	def self.insert_record(cls, elem)
 		return false unless elem.instance_of? Element
 		cls_name  = cls.attributes['name']
@@ -23,10 +23,10 @@ class DataLoader
             elsif   type == 'Color'     then elem.text
 						else 												 		 elem.text
 						end
-				
+
 		inject_variable cls_name, name, value
 	end
-	
+
 	def self.inject_variable(cls_name, name, value)
 		puts "#{cls_name} <-- #{name}=#{value} (#{value.class})"
 		eval(cls_name).const_set(name, value)
@@ -39,5 +39,4 @@ class DataLoader
       true
     end
   end
-	
 end

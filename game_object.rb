@@ -21,5 +21,4 @@ class GameObject
   def range(obj)
     @position.range obj.position
   end
-
 end

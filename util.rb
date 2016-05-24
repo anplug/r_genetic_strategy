@@ -40,5 +40,4 @@ module Util
     file = File.new "statistics", "a+"
     file.puts individual.info
   end
-
 end

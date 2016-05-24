@@ -5,5 +5,4 @@ class Size
     @w = w
     @h = h
   end
-  
 end

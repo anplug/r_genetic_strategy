@@ -84,6 +84,4 @@ class Genotype
   def self.default
     Genotype.new
   end
-
-
 end

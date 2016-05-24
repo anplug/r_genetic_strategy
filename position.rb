@@ -7,7 +7,7 @@ class Position
     @x = x
     @y = y
   end
-  
+
   def to_s
     "{#{@x.round}:#{@y.round}}"
   rescue
@@ -57,6 +57,4 @@ class Position
   def self.random
     Position.new(Random.rand(@size.w), Random.rand(@size.h))
   end
-
-
 end

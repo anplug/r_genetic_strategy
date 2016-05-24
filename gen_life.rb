@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'gosu'
 require_relative 'data_loader.rb'
 require_relative 'world.rb'
@@ -39,7 +38,6 @@ class GenWindow < Gosu::Window
         WINDOW_WIDTH, WINDOW_HEIGHT, color,
         0)
   end
-
 end
 
 File.delete("statistics") rescue false

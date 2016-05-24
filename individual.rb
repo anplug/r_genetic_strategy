@@ -5,7 +5,6 @@ require_relative 'phenotype.rb'
 require_relative 'genotype.rb'
 require_relative 'util.rb'
 
-
 class Individual < GameObject
 
   include Util
@@ -333,5 +332,4 @@ class Individual < GameObject
     end
     true
   end
-
 end

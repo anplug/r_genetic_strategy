@@ -101,5 +101,4 @@ class Phenotype
   def self.default(genotype)
     Phenotype.new genotype
   end
-
 end

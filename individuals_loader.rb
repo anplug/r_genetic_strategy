@@ -70,5 +70,4 @@ class IndividualsLoader
     @genotype = nil
     @phenotype = nil
   end
-
 end

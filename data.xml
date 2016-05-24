@@ -52,5 +52,4 @@
     <var name="IMAGE_SIZE" 		            type="Integer">10</var>
     <var name="DEFAULT_SATURATION" 	        type="Integer">2</var>
   </class>
-
 </data>
