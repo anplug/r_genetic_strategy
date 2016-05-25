@@ -1,35 +1,37 @@
 require 'rexml/document'
 
 class DataLoader
-	include REXML
+  include REXML
 
-	def self.load(file_name)
+  def self.load(file_name)
     xml_file = File.new file_name
     doc = Document.new xml_file
     doc.root.elements.each do |cls|
-			cls.each {|elem| insert_record cls, elem }
-		end
-	end
+      cls.each {|elem| insert_record cls, elem }
+    end
+  end
 
-	def self.insert_record(cls, elem)
-		return false unless elem.instance_of? Element
-		cls_name  = cls.attributes['name']
+  def self.insert_record(cls, elem)
+    return false unless elem.instance_of? Element
+    cls_name  = cls.attributes['name']
     name = elem.attributes['name']
-		type = elem.attributes['type']
-		value = if 		  type == 'Float' 		then elem.text.to_f
-						elsif 	type == 'Hex' 			then elem.text.to_i(16)
-            elsif 	type == 'Integer' 	then elem.text.to_i
-            elsif   type == 'Bool'      then parse_bool elem.text
-            elsif   type == 'Color'     then elem.text
-						else 												 		 elem.text
-						end
+    type = elem.attributes['type']
+    value =
+      case(type)
+        when 'Float'   then elem.text.to_f
+        when 'Hex'     then elem.text.to_i(16)
+        when 'Integer' then elem.text.to_i
+        when 'Bool'    then parse_bool(elem.text)
+        when 'Color'   then elem.text
+        else                elem.text
+      end
 
-		inject_variable cls_name, name, value
-	end
+    inject_variable cls_name, name, value
+  end
 
-	def self.inject_variable(cls_name, name, value)
-		puts "#{cls_name} <-- #{name}=#{value} (#{value.class})"
-		eval(cls_name).const_set(name, value)
+  def self.inject_variable(cls_name, name, value)
+    puts "#{cls_name} <-- #{name}=#{value} (#{value.class})"
+    eval(cls_name).const_set(name, value)
   end
 
   def self.parse_bool(str)

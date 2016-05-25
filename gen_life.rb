@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'gosu'
 require_relative 'app/data_loader.rb'
 require_relative 'app/world.rb'
