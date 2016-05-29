@@ -6,7 +6,6 @@ require_relative 'food.rb'
 require_relative 'util.rb'
 
 class World
-
   include Util
 
   def initialize(window, size, to_load_individuals)
@@ -56,7 +55,9 @@ class World
   end
 
   def near_individuals(individual)
-    near_individuals = @individuals.find_all {|ind| individual.in_view_scope? ind unless individual.equal? ind}
+    near_individuals = @individuals.find_all do |ind|
+      individual.in_view_scope?(ind) unless individual.equal?(ind)
+    end
     near_individuals.empty? ? nil : near_individuals
   end
 
@@ -81,7 +82,7 @@ class World
 
   def add_random_food_points(count)
     count.times do
-      @food_points << Food.new(@window, @size, Position.new(Random.rand(@size.w), Random.rand(@size.h)))
+      @food_points << Food.new(@window, Position.new(Random.rand(@size.w), Random.rand(@size.h)))
     end
   end
 

@@ -1,7 +1,7 @@
 class Food < GameObject
 
-  def initialize(window, world_size, position, saturation = DEFAULT_SATURATION)
-    super(window, world_size, position, PALETTE_PATH)
+  def initialize(window, position, saturation = DEFAULT_SATURATION)
+    super(window, position)
     @saturation = saturation >= IMAGE_SIZE**2 ? IMAGE_SIZE**2 : saturation
     @eaten = false
     @owner = nil
@@ -41,20 +41,16 @@ class Food < GameObject
   end
 
   def update_sprite
-    # draw sprite in two stages, draw full-length lines, than draw part of last line
-    @sprite = @empty_image.clone
+    super(IMAGE_SIZE)
+    line = Magick::Draw.new
     full_lines = self.full_lines
-    last_line_length = self.last_line_length
     full_lines.times do |index|
-      @sprite.paint{
-        line(0, index, IMAGE_SIZE - 1, index, :color => :black)
-      }
+      line.line(0, index, IMAGE_SIZE - 1, index)
     end
     if last_line_length != 0
-      @sprite.paint{
-        line(0, full_lines, last_line_length - 1, full_lines, :color => :black)
-      }
+      line.line(0, full_lines, last_line_length - 1, full_lines)
     end
+    line.draw(sprite) unless @eaten
   end
 
   protected

@@ -1,4 +1,3 @@
-require 'texplay'
 require_relative 'game_object.rb'
 require_relative 'position.rb'
 require_relative 'phenotype.rb'
@@ -6,11 +5,10 @@ require_relative 'genotype.rb'
 require_relative 'util.rb'
 
 class Individual < GameObject
-
   include Util
 
   attr_reader :genotype, :phenotype, :need_to_update_sprite,
-              :reproduction_pair, :is_dead
+              :reproduction_pair, :is_dead, :world_size
 
   def self.new(*args, &block)
     @index ||= -1
@@ -50,7 +48,6 @@ class Individual < GameObject
     update_sprite if @phenotype.update_sprite?
   rescue DyingFromStarving
     @is_dead = true
-
   end
 
   def set_near_individuals(near_individuals)
@@ -91,10 +88,11 @@ class Individual < GameObject
   protected
 
   def initialize(id, window, world_size, position, genotype, phenotype)
-    super(window, world_size, position, PALETTE_PATH)
+    super(window, position)
     @id = id
     @genotype = genotype
     @phenotype = phenotype
+    @world_size = world_size
 
     @need_to_update_sprite = false
     @want_to_eat = false
@@ -127,13 +125,14 @@ class Individual < GameObject
   end
 
   def update_sprite
-    @sprite = @empty_image.clone
-    size = @phenotype.absolute_size
-    color = @phenotype.color
     log 'Updating image !'
-    @sprite.paint{
-      circle(IMAGE_SIZE / 2, IMAGE_SIZE / 2, size, :color => color)
-    }
+    super(IMAGE_SIZE)
+
+    circle = Magick::Draw.new
+    circle.fill(@phenotype.color.to_s)
+    circle.circle(IMAGE_SIZE / 2, IMAGE_SIZE / 2,
+      IMAGE_SIZE / 2, IMAGE_SIZE / 2 + @phenotype.absolute_size)
+    circle.draw(sprite)
   end
 
   def have_business?
@@ -170,8 +169,8 @@ class Individual < GameObject
   end
 
   def generate_random_target
-    target = Position.new(Random.rand(@world_size.w), Random.rand(@world_size.h))
-    puts "Generate target = #{@position} -> #{target}, searching..."
+    target = Position.new(Random.rand(world_size.w), Random.rand(world_size.h))
+    #puts "Generate target = #{@position} -> #{target}, searching..."
     target
   end
 
@@ -289,12 +288,12 @@ class Individual < GameObject
   end
 
   def most_appropriate_food
-    puts "#{self} see -> #{@near_food}" if @near_food
+    #puts "#{self} see -> #{@near_food}" if @near_food
     @near_food ? closest_object(@near_food) : nil
   end
 
   def most_appropriate_pair
-    puts "#{self} see -> #{@near_individuals}" if @near_individuals
+    #puts "#{self} see -> #{@near_individuals}" if @near_individuals
     @near_individuals ? closest_object(@near_individuals) : nil  #most atractive
   end
 
