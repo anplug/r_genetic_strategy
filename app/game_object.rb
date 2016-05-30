@@ -2,16 +2,15 @@ require_relative 'position.rb'
 
 class GameObject
 
-  attr_reader :sprite, :position
+  attr_reader :sprite, :position, :window
 
-  def initialize(window, world_size, position, palette_path)
-		@empty_image = Gosu::Image.new(window, palette_path, false)
-    @world_size = world_size
+  def initialize(window, position)
+    @winow = window
     @position = position
   end
 
   def draw
-    sprite.draw_rot(position.x, position.y, 1, 0.0)
+    Gosu::Image.new(sprite).draw(position.x, position.y, 1)
   end
 
   def log(message)
@@ -20,5 +19,10 @@ class GameObject
 
   def range(obj)
     @position.range obj.position
+  end
+
+  protected def update_sprite(image_size)
+    @sprite = Magick::Image.new(image_size, image_size)
+    sprite.matte_reset!
   end
 end

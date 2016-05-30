@@ -1,5 +1,10 @@
 source 'https://rubygems.org'
 
 gem 'gosu'
-gem 'texplay'
+gem 'rmagick'
+
+group 'development' do
+  gem 'pry'
+  gem 'pry-nav'
+end
 

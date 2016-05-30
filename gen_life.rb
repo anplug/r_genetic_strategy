@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 require 'gosu'
+require 'pry'
+require 'rmagick'
 require_relative 'app/data_loader.rb'
 require_relative 'app/world.rb'
 require_relative 'app/size.rb'
@@ -16,7 +18,7 @@ class GenWindow < Gosu::Window
     update_interval = interactive_mode ? (1000 / FPS) : 0
     super WINDOW_WIDTH, WINDOW_HEIGHT, false, update_interval
     self.caption = WINDOW_CAPTION
-    @world  = World.new(self, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT), to_load_individuals)
+    @world = World.new(self, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT), to_load_individuals)
   end
 
   def update
