@@ -1,16 +1,16 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    coderay (1.1.1)
-    gosu (0.10.7)
+    coderay (1.1.2)
+    gosu (0.14.5)
     method_source (0.8.2)
-    pry (0.10.3)
+    pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
-    rmagick (2.15.4)
+    rmagick (3.0.0)
     slop (3.6.0)
 
 PLATFORMS
@@ -23,4 +23,4 @@ DEPENDENCIES
   rmagick
 
 BUNDLED WITH
-   1.12.5
+   1.16.6
