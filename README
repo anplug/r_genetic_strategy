@@ -1,1 +1,3 @@
 More details about native dependencies https://github.com/gosu/gosu
+
+Run `ruby gen_life.rb`
