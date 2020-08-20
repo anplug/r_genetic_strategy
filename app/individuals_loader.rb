@@ -1,13 +1,19 @@
 require 'rexml/document'
 require_relative 'util.rb'
+require_relative '../utils/argv_processor.rb'
 
 class IndividualsLoader
   include REXML
   include Util
 
-  def self.init(file_name)
-    xml_file = File.new file_name
-    doc = Document.new xml_file
+  extend ArgvProcessor
+
+  DEFAULT_FILE_NAME = 'data/individuals.xml'
+
+  def self.init
+    file_name = get_parameter_value('individualsFile') || DEFAULT_FILE_NAME
+    xml_file = File.new(file_name)
+    doc = Document.new(xml_file)
     @root = doc.root
     @individuals = []
   end

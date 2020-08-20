@@ -3,30 +3,32 @@
 require 'gosu'
 require 'pry'
 require 'rmagick'
+
 require_relative 'app/data_loader.rb'
 require_relative 'app/world.rb'
 require_relative 'app/size.rb'
 require_relative 'app/util.rb'
 require_relative 'app/individuals_loader.rb'
 
-include Util
+require_relative 'utils/argv_processor.rb'
 
 class GenWindow < Gosu::Window
-
-  def initialize(interactive_mode, to_load_individuals)
-    @interactive_mode = interactive_mode
-    update_interval = interactive_mode ? (1000 / FPS) : 0
-    super WINDOW_WIDTH, WINDOW_HEIGHT, false, update_interval
+  def initialize(headless_mode, to_load_individuals)
+    @headless_mode = headless_mode
+    update_interval = headless_mode ? 0 : (1000 / FPS)
+    super(WINDOW_WIDTH, WINDOW_HEIGHT, false, update_interval)
     self.caption = WINDOW_CAPTION
     @world = World.new(self, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT), to_load_individuals)
   end
+
+  private
 
   def update
     @world.update
   end
 
   def draw
-    if @interactive_mode
+    unless @headless_mode
       draw_background
       @world.draw
     end
@@ -44,13 +46,21 @@ class GenWindow < Gosu::Window
   end
 end
 
-File.delete("statistics") rescue false
+class App
+  extend ArgvProcessor
 
-input_file_name = get_parameter_value('inputFile') || 'data/data.xml'
-individuals_file = get_parameter_value('individualsFile') || 'data/individuals.xml'
-interactive_mode = !parameter_present?('nonInteractive')
-to_load_individuals = parameter_present?('loadIndividuals')
-DataLoader.load input_file_name
-IndividualsLoader.init(individuals_file)
-window = GenWindow.new interactive_mode, to_load_individuals
-window.show
+  class << self
+    def run
+      File.delete("statistics") rescue false
+
+      headless_mode = parameter_present?('headless')
+      load_individuals = parameter_present?('loadIndividuals')
+
+      DataLoader.load
+      IndividualsLoader.init
+      GenWindow.new(headless_mode, load_individuals).show
+    end
+  end
+end
+
+App.run

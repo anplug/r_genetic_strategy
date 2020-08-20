@@ -1,19 +1,24 @@
 require 'rexml/document'
+require_relative '../utils/argv_processor.rb'
 
 class DataLoader
   include REXML
+  extend ArgvProcessor
 
-  def self.load(file_name)
-    xml_file = File.new file_name
-    doc = Document.new xml_file
+  DEFAULT_FILE_NAME = 'data/data.xml'
+
+  def self.load
+    file_name = get_parameter_value('inputFile') || DEFAULT_FILE_NAME
+    xml_file = File.new(file_name)
+    doc = Document.new(xml_file)
     doc.root.elements.each do |cls|
-      cls.each {|elem| insert_record cls, elem }
+      cls.each { |elem| insert_record cls, elem }
     end
   end
 
   def self.insert_record(cls, elem)
     return false unless elem.instance_of? Element
-    cls_name  = cls.attributes['name']
+    cls_name = cls.attributes['name']
     name = elem.attributes['name']
     type = elem.attributes['type']
     value =
@@ -26,7 +31,7 @@ class DataLoader
         else                elem.text
       end
 
-    inject_variable cls_name, name, value
+    inject_variable(cls_name, name, value)
   end
 
   def self.inject_variable(cls_name, name, value)
