@@ -4,13 +4,13 @@ require 'gosu'
 require 'pry'
 require 'rmagick'
 
-require_relative 'app/data_loader.rb'
 require_relative 'app/world.rb'
 require_relative 'app/size.rb'
 require_relative 'app/util.rb'
-require_relative 'app/individuals_loader.rb'
 
 require_relative 'utils/argv_processor.rb'
+require_relative 'utils/data_loader.rb'
+require_relative 'utils/individuals_loader.rb'
 
 class GenWindow < Gosu::Window
   def initialize(headless_mode, to_load_individuals)
@@ -57,7 +57,6 @@ class App
       load_individuals = parameter_present?('loadIndividuals')
 
       DataLoader.load
-      IndividualsLoader.init
       GenWindow.new(headless_mode, load_individuals).show
     end
   end

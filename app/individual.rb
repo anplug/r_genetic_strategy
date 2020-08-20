@@ -2,7 +2,6 @@ require_relative 'game_object.rb'
 require_relative 'position.rb'
 require_relative 'phenotype.rb'
 require_relative 'genotype.rb'
-require_relative 'util.rb'
 
 class Individual < GameObject
   include Util
@@ -16,7 +15,13 @@ class Individual < GameObject
     new_args = [@index] + args
     obj = self.allocate
     obj.send :initialize, *new_args, &block
+    write_statistics(obj)
     obj
+  end
+
+  def self.write_statistics(obj)
+    file = File.new "statistics", "a+"
+    file.puts obj.info
   end
 
   def to_s

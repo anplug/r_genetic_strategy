@@ -3,7 +3,6 @@ require_relative 'position.rb'
 require_relative 'genotype.rb'
 require_relative 'phenotype.rb'
 require_relative 'food.rb'
-require_relative 'util.rb'
 
 class World
   include Util
@@ -24,11 +23,16 @@ class World
 
   def init_individuals(to_load_individuals)
     if to_load_individuals
-      IndividualsLoader.set_window @window
-      IndividualsLoader.set_world_size @size
-      @individuals = IndividualsLoader.load
+      individuals = IndividualsLoader.load
+      pupulate_the_world(individuals)
     else
       add_random_individuals(INDIVIDUALS_NUMBER)
+    end
+  end
+
+  def populate_the_world(individuals)
+    @individuals = individuals.map do |ind|
+      Individual.new(@window, @world_size, ind[:position], ind[:genotype], ind[:phenotype])
     end
   end
 
@@ -76,7 +80,7 @@ class World
       genotype = Genotype.default
       phenotype = Phenotype.default genotype
       position = Position.random
-      @individuals << create_individual(@window, @size, position, genotype, phenotype)
+      @individuals << Individual.new(@window, @size, position, genotype, phenotype)
     end
   end
 
@@ -90,7 +94,7 @@ class World
     genotype = Genotype.genotype_crossing(pair[0].genotype, pair[1].genotype)
     phenotype = Phenotype.default genotype
     position = Position.new(pair.first.position.x, pair.first.position.y)
-    @new_individuals << create_individual(@window, @size, position, genotype, phenotype)
+    @new_individuals << Individual.new(@window, @size, position, genotype, phenotype)
   end
 
   def kill_individual(ind)
