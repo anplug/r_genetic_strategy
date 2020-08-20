@@ -1,11 +1,9 @@
 require_relative 'position.rb'
 
 class GameObject
+  attr_reader :sprite, :position
 
-  attr_reader :sprite, :position, :window
-
-  def initialize(window, position)
-    @winow = window
+  def initialize(position)
     @position = position
   end
 

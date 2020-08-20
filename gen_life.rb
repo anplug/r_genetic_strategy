@@ -13,12 +13,12 @@ require_relative 'utils/data_loader.rb'
 require_relative 'utils/individuals_loader.rb'
 
 class GenWindow < Gosu::Window
-  def initialize(headless_mode, to_load_individuals)
+  def initialize(world, headless_mode)
+    @world = world
     @headless_mode = headless_mode
     update_interval = headless_mode ? 0 : (1000 / FPS)
     super(WINDOW_WIDTH, WINDOW_HEIGHT, false, update_interval)
     self.caption = WINDOW_CAPTION
-    @world = World.new(self, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT), to_load_individuals)
   end
 
   private
@@ -53,11 +53,14 @@ class App
     def run
       File.delete("statistics") rescue false
 
+      DataLoader.load
+
       headless_mode = parameter_present?('headless')
       load_individuals = parameter_present?('loadIndividuals')
 
-      DataLoader.load
-      GenWindow.new(headless_mode, load_individuals).show
+      binding.pry
+      world = World.new(Size.new(WINDOW_WIDTH, WINDOW_HEIGHT), load_individuals)
+      GenWindow.new(world, headless_mode).show
     end
   end
 end

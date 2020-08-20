@@ -1,7 +1,6 @@
 class Food < GameObject
-
-  def initialize(window, position, saturation = DEFAULT_SATURATION)
-    super(window, position)
+  def initialize(position, saturation = DEFAULT_SATURATION)
+    super(position)
     @saturation = saturation >= IMAGE_SIZE**2 ? IMAGE_SIZE**2 : saturation
     @eaten = false
     @owner = nil

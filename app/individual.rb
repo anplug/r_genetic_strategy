@@ -92,8 +92,8 @@ class Individual < GameObject
 
   protected
 
-  def initialize(id, window, world_size, position, genotype, phenotype)
-    super(window, position)
+  def initialize(id, world_size, position, genotype, phenotype)
+    super(position)
     @id = id
     @genotype = genotype
     @phenotype = phenotype
