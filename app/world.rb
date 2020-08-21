@@ -25,7 +25,7 @@ class World
       individuals = IndividualsLoader.load
       pupulate_the_world(individuals)
     else
-      add_random_individuals(INDIVIDUALS_NUMBER)
+      add_random_individuals(S.individuals_number)
     end
   end
 
@@ -36,7 +36,7 @@ class World
   end
 
   def init_food
-    add_random_food_points FOOD_POINTS_NUMBER
+    add_random_food_points(S.food_points_number)
   end
 
   def update

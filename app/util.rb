@@ -11,8 +11,4 @@ module Util
       false
     end
   end
-
-  def rand_in_range(min, max)
-    rand * (max - min) + min
-  end
 end
