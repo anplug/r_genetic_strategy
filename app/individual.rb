@@ -2,7 +2,6 @@ require_relative 'game_object.rb'
 require_relative 'position.rb'
 require_relative 'phenotype.rb'
 require_relative 'genotype.rb'
-require_relative 'util.rb'
 
 class Individual < GameObject
   include Util
@@ -16,7 +15,13 @@ class Individual < GameObject
     new_args = [@index] + args
     obj = self.allocate
     obj.send :initialize, *new_args, &block
+    write_statistics(obj)
     obj
+  end
+
+  def self.write_statistics(obj)
+    file = File.new "statistics", "a+"
+    file.puts obj.info
   end
 
   def to_s
@@ -87,8 +92,8 @@ class Individual < GameObject
 
   protected
 
-  def initialize(id, window, world_size, position, genotype, phenotype)
-    super(window, position)
+  def initialize(id, world_size, position, genotype, phenotype)
+    super(position)
     @id = id
     @genotype = genotype
     @phenotype = phenotype
@@ -126,12 +131,13 @@ class Individual < GameObject
 
   def update_sprite
     log 'Updating image !'
-    super(IMAGE_SIZE)
+    image_size = S.image_size(:individual)
+    super(image_size)
 
     circle = Magick::Draw.new
     circle.fill(@phenotype.color.to_s)
-    circle.circle(IMAGE_SIZE / 2, IMAGE_SIZE / 2,
-      IMAGE_SIZE / 2, IMAGE_SIZE / 2 + @phenotype.absolute_size)
+    circle.circle(image_size / 2, image_size / 2,
+      image_size / 2, image_size / 2 + @phenotype.absolute_size)
     circle.draw(sprite)
   end
 
@@ -145,7 +151,7 @@ class Individual < GameObject
   end
 
   def set_hungry_status
-    if @phenotype.satiety <= HUNGRY_BORDER
+    if @phenotype.satiety <= S.hungry_border
       log "Want to eat (#{@phenotype.satiety})" unless @want_to_eat  #talk about food only at first time
       @want_to_eat = true
     else
@@ -157,12 +163,12 @@ class Individual < GameObject
     if @phenotype.age > @genotype.reproduction_gene
       if @just_reproducted
         @iterations_after_reproduction += 1
-        if @iterations_after_reproduction == ITERATIONS_AFTER_REPRODUCTING
+        if @iterations_after_reproduction == S.iterations_after_reproducting
           @just_reproducted = false
           @iterations_after_reproduction = 0
         end
       elsif !@want_to_reproduct
-        @want_to_reproduct = true if happens_with_probability? AGE_MUTATION_PROBABILITY
+        @want_to_reproduct = true if happens_with_probability? S.age_mutation_probability
         log "Want to reproduct (#{@phenotype.age})" if @want_to_reproduct
       end
     end
@@ -195,7 +201,7 @@ class Individual < GameObject
   end
 
   def desire_priority
-    if @phenotype.satiety < STARVING_BORDER
+    if @phenotype.satiety < S.starving_border
       Food
     elsif @want_to_reproduct
       Individual
@@ -265,7 +271,7 @@ class Individual < GameObject
 
   def feeding_operation
     old_satiety = @phenotype.satiety
-    @phenotype.satiety += FOOD_PER_POINT
+    @phenotype.satiety += S.food_per_point
     log "I got food #{old_satiety} --> #{@phenotype.satiety}"
   end
 
@@ -316,7 +322,7 @@ class Individual < GameObject
   def in_reproduction?
     return false unless @in_reproduction
     @iterations_in_reproduction += 1
-    if @iterations_in_reproduction == REPRODUCTION_PHASE_TIME
+    if @iterations_in_reproduction == S.reproduction_phase_time
       if @active  #real pair generating only at end of reproduction
         @reproduction_pair = [self, @pair]
       end

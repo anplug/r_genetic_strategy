@@ -3,15 +3,13 @@ require_relative 'position.rb'
 require_relative 'genotype.rb'
 require_relative 'phenotype.rb'
 require_relative 'food.rb'
-require_relative 'util.rb'
 
 class World
   include Util
 
-  def initialize(window, size, to_load_individuals)
+  def initialize(size, to_load_individuals)
     Position.inject_size(size)
     @size = size
-    @window = window
     @individuals = []
     @food_points = []
 
@@ -24,16 +22,21 @@ class World
 
   def init_individuals(to_load_individuals)
     if to_load_individuals
-      IndividualsLoader.set_window @window
-      IndividualsLoader.set_world_size @size
-      @individuals = IndividualsLoader.load
+      individuals = IndividualsLoader.load
+      pupulate_the_world(individuals)
     else
-      add_random_individuals(INDIVIDUALS_NUMBER)
+      add_random_individuals(S.individuals_number)
+    end
+  end
+
+  def populate_the_world(individuals)
+    @individuals = individuals.map do |ind|
+      Individual.new(@world_size, ind[:position], ind[:genotype], ind[:phenotype])
     end
   end
 
   def init_food
-    add_random_food_points FOOD_POINTS_NUMBER
+    add_random_food_points(S.food_points_number)
   end
 
   def update
@@ -76,13 +79,13 @@ class World
       genotype = Genotype.default
       phenotype = Phenotype.default genotype
       position = Position.random
-      @individuals << create_individual(@window, @size, position, genotype, phenotype)
+      @individuals << Individual.new(@size, position, genotype, phenotype)
     end
   end
 
   def add_random_food_points(count)
     count.times do
-      @food_points << Food.new(@window, Position.new(Random.rand(@size.w), Random.rand(@size.h)))
+      @food_points << Food.new(Position.new(Random.rand(@size.w), Random.rand(@size.h)))
     end
   end
 
@@ -90,7 +93,7 @@ class World
     genotype = Genotype.genotype_crossing(pair[0].genotype, pair[1].genotype)
     phenotype = Phenotype.default genotype
     position = Position.new(pair.first.position.x, pair.first.position.y)
-    @new_individuals << create_individual(@window, @size, position, genotype, phenotype)
+    @new_individuals << Individual.new(@size, position, genotype, phenotype)
   end
 
   def kill_individual(ind)

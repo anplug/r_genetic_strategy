@@ -6,16 +6,19 @@ class Phenotype
   attr_reader :color, :attractiveness, :age, :strength, :size, :speed, :view_scope
   attr_accessor :satiety
 
-  def initialize(genotype, attractiveness = DEFAULT_ATTRACTIVENESS, age = DEFAULT_AGE,
-                 strength = DEFAULT_STRENGTH, size = DEFAULT_SIZE,
-                 speed = DEFAULT_SPEED,view_scope = DEFAULT_VIEW_SCOPE)
+  def initialize(genotype, attractiveness = S.default_attractiveness,
+                 age = S.default_age,
+                 strength = S.default_strength,
+                 size = S.default_size,
+                 speed = S.default_speed,
+                 view_scope = S.default_view_scope)
     @color = genotype.color_gene.generate_real_color
     @age = age
     @strength = strength
     @size = size
     @speed = speed
     @view_scope = view_scope
-    @satiety = INITIAL_SATIETY
+    @satiety = S.initial_satiety
     @attractiveness = attractiveness
 
     @update_sprite_flag = false
@@ -30,11 +33,11 @@ class Phenotype
   end
 
   def absolute_size
-    @size * SIZE_COEFFICIENT
+    @size * S.size_coefficient
   end
 
   def maximum_size?
-    absolute_size >= MAXIMUM_SIZE
+    absolute_size >= S.maximum_size
   end
 
   def positive_feed_factor
@@ -57,11 +60,11 @@ class Phenotype
   # Parameter updaters
 
   def update_age
-    @age += AGE_INCR
+    @age += S.age_incr
   end
 
   def update_strength(genotype)
-    @strength += genotype.strength_gene * STRENGTH_INCR * negative_feed_factor
+    @strength += genotype.strength_gene * S.strength_incr * negative_feed_factor
   end
 
   def update_size(genotype)
@@ -69,7 +72,7 @@ class Phenotype
     unless maximum_size?
       prev_size = absolute_size
       feed_factor = positive_feed_factor
-      val = genotype.size_gene * SIZE_INCR * feed_factor
+      val = genotype.size_gene * S.size_incr * feed_factor
       @size += val
       @update_sprite_flag = absolute_size.to_i - prev_size.to_i != 0
     end
@@ -77,12 +80,12 @@ class Phenotype
 
   def update_speed
     size_strength_coef = @strength / @size
-    size_strength_coef *= -1 if size_strength_coef <= STRENGTH_TO_SIZE_MAX_COEF
-    @speed += SPEED_INCR * size_strength_coef
+    size_strength_coef *= -1 if size_strength_coef <= S.strength_to_size_max_coef
+    @speed += S.speed_incr * size_strength_coef
   end
 
   def update_view_scope(genotype)
-    @view_scope -= VIEW_SCOPE_INCR * (1 / genotype.sight_gene)
+    @view_scope -= S.view_scope_incr * (1 / genotype.sight_gene)
   end
 
   def update_satiety(is_moving)
@@ -90,7 +93,7 @@ class Phenotype
       @satiety = 0
       raise DyingFromStarving
     end
-    @satiety -= (SATIETY_INCR * @size * positive_feed_factor + (is_moving ? SATIETY_INCR : 0))
+    @satiety -= (S.satiety_incr * @size * positive_feed_factor + (is_moving ? S.satiety_incr : 0))
   end
 
   def set(field, val)

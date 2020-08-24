@@ -1,15 +1,15 @@
 require_relative 'color_gene.rb'
-require_relative 'util.rb'
 
 class Genotype
-  include Util
-
   attr_reader :survival_gene, :color_gene, :size_gene,
               :strength_gene, :sight_gene, :reproduction_gene
 
-  def initialize(color_gene = ColorGene.init(DEFAULT_COLOR_GENE), survival_gene = DEFAULT_SURVIVAL_GENE,
-                 size_gene = DEFAULT_SIZE_GENE, strength_gene = DEFAULT_STRENGTH_GENE,
-                 sight_gene = DEFAULT_SIGHT_GENE, reproduction_gene = DEFAULT_REPRODUCTION_GENE)
+  def initialize(color_gene = ColorGene.init(S.default_color_gene),
+                 survival_gene = S.default_survival_gene,
+                 size_gene = S.default_size_gene,
+                 strength_gene = S.default_strength_gene,
+                 sight_gene = S.default_sight_gene,
+                 reproduction_gene = S.default_reproduction_gene)
     @color_gene = color_gene
     @survival_gene = survival_gene
     @size_gene = size_gene
@@ -79,6 +79,10 @@ class Genotype
   def self.cross_gene(gene1, gene2)
     gene1, gene2 = gene2, gene1 if gene2 > gene1
     rand_in_range(gene1, gene2)
+  end
+
+  def self.rand_in_range(min, max)
+    rand * (max - min) + min
   end
 
   def self.default
