@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rexml/document'
 require_relative 'argv_processor.rb'
 
@@ -13,7 +15,7 @@ class Settings
     @settings = {}
     @setting_pathes = {}
 
-    doc = Document.new(File.new("#{file_name}"))
+    doc = Document.new(File.new(file_name.to_s))
     doc.root.elements.each do |category|
       category.each { |elem| insert_record(category, elem) }
     end
@@ -21,17 +23,18 @@ class Settings
 
   def self.insert_record(category_elem, elem)
     return false unless elem.instance_of?(Element)
+
     category = category_elem.attributes['name'].downcase.to_sym
     name = elem.attributes['name'].downcase.to_sym
     type = elem.attributes['type']
     value =
-      case(type)
-        when 'Float'   then elem.text.to_f
-        when 'Hex'     then elem.text.to_i(16)
-        when 'Integer' then elem.text.to_i
-        when 'Bool'    then parse_bool(elem.text)
-        when 'Color'   then elem.text
-        else                elem.text
+      case type
+      when 'Float'   then elem.text.to_f
+      when 'Hex'     then elem.text.to_i(16)
+      when 'Integer' then elem.text.to_i
+      when 'Bool'    then parse_bool(elem.text)
+      when 'Color'   then elem.text
+      else                elem.text
       end
 
     set_setting(category, name, value)
@@ -60,15 +63,11 @@ class Settings
   def self.method_missing(*args)
     name = args.first
     categories = @setting_pathes[name]
-    if categories.nil?
-      raise "Property #{name} not found"
-    end
+    raise "Property #{name} not found" if categories.nil?
 
     return @settings[categories.first][name] if categories.size == 1
 
-    if args.size == 1
-      raise "No category provided for #{name} specify on of #{categories}"
-    end
+    raise "No category provided for #{name} specify on of #{categories}" if args.size == 1
 
     category = args[1]
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Size
   attr_reader :w, :h
 
