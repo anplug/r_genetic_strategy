@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Food < GameObject
   def initialize(position, saturation = S.default_saturation)
     super(position)
@@ -12,7 +14,8 @@ class Food < GameObject
   end
 
   def empty?
-    return true if @saturation == 0
+    return true if @saturation.zero?
+
     false
   end
 
@@ -28,7 +31,8 @@ class Food < GameObject
   end
 
   def try_to_eat(pretender)
-    return false if @saturation == 0
+    return false if @saturation.zero?
+
     @owner = pretender
     eat
   end
@@ -46,9 +50,7 @@ class Food < GameObject
     full_lines.times do |index|
       line.line(0, index, S.image_size(:food) - 1, index)
     end
-    if last_line_length != 0
-      line.line(0, full_lines, last_line_length - 1, full_lines)
-    end
+    line.line(0, full_lines, last_line_length - 1, full_lines) if last_line_length != 0
     line.draw(sprite) unless @eaten
   end
 

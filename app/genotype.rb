@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'color_gene.rb'
 
 class Genotype
@@ -19,7 +21,7 @@ class Genotype
   end
 
   def to_s
-    #"#{@survival_gene.round 3}, #{@size_gene.round 3}, #{@strength_gene.round 3}"
+    # "#{@survival_gene.round 3}, #{@size_gene.round 3}, #{@strength_gene.round 3}"
     'Genotype'
   end
 
@@ -44,9 +46,7 @@ class Genotype
   end
 
   def self.genotype_crossing(genotype1, genotype2)
-    mutated1 = self.mutate_genotype genotype1
-    mutated2 = self.mutate_genotype genotype2
-    self.cross mutated1, mutated2
+    cross mutate_genotype(genotype1), mutate_genotype(genotype2)
   end
 
   def self.mutate_genotype(genotype)
@@ -57,7 +57,7 @@ class Genotype
     mutated_reproduction_gene = mutate_gene genotype.reproduction_gene
 
     Genotype.new genotype.color_gene, mutated_survival_gene, mutated_size_gene,
-                mutated_strength_gene, mutated_sight_gene, mutated_reproduction_gene
+                 mutated_strength_gene, mutated_sight_gene, mutated_reproduction_gene
   end
 
   def self.cross(genotype1, genotype2)
@@ -73,7 +73,7 @@ class Genotype
   end
 
   def self.mutate_gene(gene)
-    rand_in_range(gene/2, gene + gene/2)
+    rand_in_range(gene / 2, gene + gene / 2)
   end
 
   def self.cross_gene(gene1, gene2)
@@ -83,9 +83,5 @@ class Genotype
 
   def self.rand_in_range(min, max)
     rand * (max - min) + min
-  end
-
-  def self.default
-    Genotype.new
   end
 end

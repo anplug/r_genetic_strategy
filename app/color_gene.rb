@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'util.rb'
 
 class ColorGene
@@ -5,13 +7,13 @@ class ColorGene
 
   attr_reader :colors
 
-  @available_colors = [:red, :green, :blue]
+  @available_colors = %i[red green blue]
 
   def to_s
-    "#{@colors[0].to_s}-#{@colors[1].to_s}"
+    "#{@colors[0]}-#{@colors[1]}"
   end
 
-  def initialize(color1, color2=color1)
+  def initialize(color1, color2 = color1)
     color1 = symbolic_representation color1 unless color1.instance_of? Symbol
     color2 = symbolic_representation color2 unless color2.instance_of? Symbol
     @colors = [color1, color2]
@@ -35,7 +37,6 @@ class ColorGene
     (@colors[0] == color1 && @colors[1] == color2) || (@colors[1] == color1 && @colors[0] == color2)
   end
 
-
   def self.init(color_string)
     colors = color_string.split
     if colors.size >= 2
@@ -46,8 +47,9 @@ class ColorGene
   end
 
   def self.symbolic_representation(color_string)
-    result = @available_colors.find {|available_color| available_color.to_s == color_string }
+    result = @available_colors.find { |available_color| available_color.to_s == color_string }
     raise ArgumentError, 'Unavailable color' unless result
+
     result
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'game_object.rb'
 require_relative 'position.rb'
 require_relative 'phenotype.rb'
@@ -13,14 +15,14 @@ class Individual < GameObject
     @index ||= -1
     @index += 1
     new_args = [@index] + args
-    obj = self.allocate
+    obj = allocate
     obj.send :initialize, *new_args, &block
     write_statistics(obj)
     obj
   end
 
   def self.write_statistics(obj)
-    file = File.new "statistics", "a+"
+    file = File.new 'statistics', 'a+'
     file.puts obj.info
   end
 
@@ -41,7 +43,7 @@ class Individual < GameObject
     result / 5
   end
 
-  def update
+  def update(_world)
     if !in_reproduction?
       make_decision
       process_view
@@ -85,18 +87,22 @@ class Individual < GameObject
 
   def get_reproduction_pair
     return nil if @reproduction_pair.empty?
+
     temp = @reproduction_pair
     @reproduction_pair = []
-    return temp
+    temp
   end
 
   protected
 
-  def initialize(id, world_size, position, genotype, phenotype)
+  def initialize(id, world_size,
+                 position: Position.random,
+                 genotype: Genotype.new,
+                 phenotype: nil)
     super(position)
     @id = id
     @genotype = genotype
-    @phenotype = phenotype
+    @phenotype = phenotype || Phenotype.new(genotype)
     @world_size = world_size
 
     @need_to_update_sprite = false
@@ -137,7 +143,7 @@ class Individual < GameObject
     circle = Magick::Draw.new
     circle.fill(@phenotype.color.to_s)
     circle.circle(image_size / 2, image_size / 2,
-      image_size / 2, image_size / 2 + @phenotype.absolute_size)
+                  image_size / 2, image_size / 2 + @phenotype.absolute_size)
     circle.draw(sprite)
   end
 
@@ -152,7 +158,7 @@ class Individual < GameObject
 
   def set_hungry_status
     if @phenotype.satiety <= S.hungry_border
-      log "Want to eat (#{@phenotype.satiety})" unless @want_to_eat  #talk about food only at first time
+      log("Want to eat (#{@phenotype.satiety})") unless @want_to_eat # talk about food only at first time
       @want_to_eat = true
     else
       @want_to_eat = false
@@ -176,21 +182,23 @@ class Individual < GameObject
 
   def generate_random_target
     target = Position.new(Random.rand(world_size.w), Random.rand(world_size.h))
-    #puts "Generate target = #{@position} -> #{target}, searching..."
+    # puts "Generate target = #{@position} -> #{target}, searching..."
     target
   end
 
   def process_view
     return false if target_is_object? || !have_business?
+
     food = most_appropriate_food if @want_to_eat
     pair = most_appropriate_pair if @want_to_reproduct
     return false if !food && !pair
+
     set_target food, pair
   end
 
   def set_target(food, pair)
     priority = desire_priority
-    if priority == Food || priority == nil
+    if priority == Food || priority.nil?
       @target = food || pair
     elsif priority == Individual
       @target = pair || food
@@ -205,13 +213,12 @@ class Individual < GameObject
       Food
     elsif @want_to_reproduct
       Individual
-    else
-      nil
     end
   end
 
   def moving
     return false unless have_business?
+
     if target_reached?
       make_action
       return false
@@ -243,7 +250,9 @@ class Individual < GameObject
 
   def reproduction_stage
     log 'Here, reproduction stage!'
-    unless @passive
+    if @passive
+      log "Have proposal from #{@target}"
+    else
       log 'Im active!'
       @active = true
       answer = @target.reproduction_proposal self
@@ -254,18 +263,16 @@ class Individual < GameObject
         log "Reproduction rejected from #{@target}"
         @active = false
       end
-    else
-      log "Have proposal from #{@target}"
     end
   end
 
   def eat_transaction
     owner = @target.get_owner
-    if owner == self || owner == nil || !owner.stronger?(@phenotype.strength)
+    if owner == self || owner.nil? || !owner.stronger?(@phenotype.strength)
       log "Eating #{@target}" #: #{owner} is weakly" if owner.class == Individual
       feeding_operation if @target.try_to_eat self
     else
-      #log "Can't eat #{@target} : #{owner} is stronger"
+      # log "Can't eat #{@target} : #{owner} is stronger"
     end
   end
 
@@ -280,27 +287,26 @@ class Individual < GameObject
       closest_obj = objects_arr.first
     else
       obj_range_hash = create_obj_range_hash objects_arr
-      closest_obj = obj_range_hash.max_by {|k, v| v}.first
+      closest_obj = obj_range_hash.max_by { |_k, v| v }.first
     end
     log "Closest #{closest_obj.class} is #{closest_obj}"
     closest_obj
   end
 
   def create_obj_range_hash(objects_arr)
-    objects_arr.reduce({}) do |result, elem|
+    objects_arr.each_with_object({}) do |elem, result|
       result[elem] = range elem
-      result
     end
   end
 
   def most_appropriate_food
-    #puts "#{self} see -> #{@near_food}" if @near_food
+    # puts "#{self} see -> #{@near_food}" if @near_food
     @near_food ? closest_object(@near_food) : nil
   end
 
   def most_appropriate_pair
-    #puts "#{self} see -> #{@near_individuals}" if @near_individuals
-    @near_individuals ? closest_object(@near_individuals) : nil  #most atractive
+    # puts "#{self} see -> #{@near_individuals}" if @near_individuals
+    @near_individuals ? closest_object(@near_individuals) : nil # most atractive
   end
 
   def target_is_object?
@@ -311,7 +317,7 @@ class Individual < GameObject
     @phenotype.strength > strength
   end
 
-  def suitable_individual(potential_pair)
+  def suitable_individual(_potential_pair)
     if @want_to_reproduct
       true
     else
@@ -321,11 +327,10 @@ class Individual < GameObject
 
   def in_reproduction?
     return false unless @in_reproduction
+
     @iterations_in_reproduction += 1
     if @iterations_in_reproduction == S.reproduction_phase_time
-      if @active  #real pair generating only at end of reproduction
-        @reproduction_pair = [self, @pair]
-      end
+      @reproduction_pair = [self, @pair] if @active # real pair generating only at end of reproduction
       @pair = nil
       @want_to_reproduct = false
       @just_reproducted = true
@@ -333,7 +338,7 @@ class Individual < GameObject
       @iterations_in_reproduction = 0
       @active = false
       @passive = false
-      log "Finished reproduction"
+      log 'Finished reproduction'
     end
     true
   end

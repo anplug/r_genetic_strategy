@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require_relative 'genotype.rb'
 require_relative 'dying_from_starving.rb'
 
 class Phenotype
-
   attr_reader :color, :attractiveness, :age, :strength, :size, :speed, :view_scope
   attr_accessor :satiety
 
@@ -45,7 +46,7 @@ class Phenotype
   end
 
   def negative_feed_factor
-    (@satiety**3)/1.0
+    (@satiety**3) / 1.0
   end
 
   def update(genotype, is_moving)
@@ -99,9 +100,5 @@ class Phenotype
   def set(field, val)
     command = "@#{field} = #{val}"
     eval(command)
-  end
-
-  def self.default(genotype)
-    Phenotype.new genotype
   end
 end

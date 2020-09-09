@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rexml/document'
 require_relative 'argv_processor.rb'
 
@@ -30,8 +32,8 @@ class IndividualsLoader
 
   def self.parse_element(element)
     name = element.attributes['name']
-    if    name == 'position'  then @position  = parse_position(element.text)
-    elsif name == 'Genotype'  then @genotype  = parse_genotype(element)
+    if    name == 'position'  then @position = parse_position(element.text)
+    elsif name == 'Genotype'  then @genotype = parse_genotype(element)
     elsif name == 'Phenotype' then @phenotype = parse_phenotype(element)
     end
   end
@@ -44,9 +46,7 @@ class IndividualsLoader
   def self.parse_genotype(genotype_elem)
     genotype = Genotype.new
     genotype_elem.each do |var|
-      if var.class != REXML::Text
-        genotype.set(var.attributes['name'], var.text)
-      end
+      genotype.set(var.attributes['name'], var.text) if var.class != REXML::Text
     end
     genotype
   end
@@ -54,9 +54,7 @@ class IndividualsLoader
   def self.parse_phenotype(phenotype_elem)
     phenotype = Phenotype.new @genotype
     phenotype_elem.each do |var|
-      if var.class != REXML::Text
-        phenotype.set(var.attributes['name'], var.text.to_f)
-      end
+      phenotype.set(var.attributes['name'], var.text.to_f) if var.class != REXML::Text
     end
     phenotype
   end

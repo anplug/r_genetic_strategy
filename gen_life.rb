@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'gosu'
 require 'pry'
@@ -36,13 +37,15 @@ class GenWindow < Gosu::Window
 
   def draw_background
     return unless S.background
+
     color = Gosu::Color.argb(S.background_color)
     draw_quad(
-        0,     		      0,      		     color,
-        S.window_width, 0,      		     color,
-        0,     		      S.window_height, color,
-        S.window_width, S.window_height, color,
-        0)
+      0, 0, color,
+      S.window_width, 0, color,
+      0, S.window_height, color,
+      S.window_width, S.window_height, color,
+      0
+    )
   end
 end
 
@@ -51,7 +54,11 @@ class App
 
   class << self
     def run
-      File.delete("statistics") rescue false
+      begin
+        File.delete('statistics')
+      rescue StandardError
+        false
+      end
       Settings.load
 
       headless_mode = parameter_present?('headless')

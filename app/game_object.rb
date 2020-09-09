@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'position.rb'
 
 class GameObject
@@ -12,7 +14,7 @@ class GameObject
   end
 
   def log(message)
-    #puts "#{self} #{message}"
+    # puts "#{self} #{message}"
   end
 
   def range(obj)
