@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require 'pry'
 require 'rmagick'
 
 require_relative 'app/world.rb'
@@ -14,12 +13,18 @@ require_relative 'utils/settings.rb'
 require_relative 'utils/individuals_loader.rb'
 
 class GenWindow < Gosu::Window
-  def initialize(world, headless_mode)
+  def initialize(world)
     @world = world
-    @headless_mode = headless_mode
-    update_interval = headless_mode ? 0 : (1000 / S.fps)
-    super(S.window_width, S.window_height, false, update_interval)
+    update_interval = 1000 / S.fps
+    super(S.window_width, S.window_height,
+          fullscreen: false,
+          resizable: false,
+          update_interval: update_interval)
     self.caption = S.window_caption
+  end
+
+  def perform
+    show
   end
 
   private
@@ -29,15 +34,11 @@ class GenWindow < Gosu::Window
   end
 
   def draw
-    unless @headless_mode
-      draw_background
-      @world.draw
-    end
+    draw_background if S.background
+    @world.draw
   end
 
   def draw_background
-    return unless S.background
-
     color = Gosu::Color.argb(S.background_color)
     draw_quad(
       0, 0, color,
@@ -46,6 +47,18 @@ class GenWindow < Gosu::Window
       S.window_width, S.window_height, color,
       0
     )
+  end
+end
+
+class HeadlessProcess
+  def initialize(world)
+    @world = world
+  end
+
+  def perform
+    while true
+      @world.update
+    end
   end
 end
 
@@ -65,7 +78,7 @@ class App
       load_individuals = parameter_present?('loadIndividuals')
 
       world = World.new(Size.new(S.window_width, S.window_height), load_individuals)
-      GenWindow.new(world, headless_mode).show
+      (headless_mode ? HeadlessProcess : GenWindow).new(world).perform
     end
   end
 end
