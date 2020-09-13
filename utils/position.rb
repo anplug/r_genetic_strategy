@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'size.rb'
-
 class Position
   attr_accessor :x, :y
 
@@ -50,13 +48,5 @@ class Position
     else
       pos.position
     end
-  end
-
-  def self.inject_size(size)
-    @size = size
-  end
-
-  def self.random
-    Position.new(Random.rand(@size.w), Random.rand(@size.h))
   end
 end

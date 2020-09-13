@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'genotype.rb'
-require_relative 'dying_from_starving.rb'
-
 class Phenotype
   attr_reader :color, :attractiveness, :age, :strength, :size, :speed, :view_scope
   attr_accessor :satiety
 
-  def initialize(genotype, attractiveness = S.default_attractiveness,
+  def initialize(genotype,
+                 attractiveness = S.default_attractiveness,
                  age = S.default_age,
                  strength = S.default_strength,
                  size = S.default_size,
