@@ -1,21 +1,17 @@
 # frozen_string_literal: true
 
-require_relative 'util.rb'
-
 class ColorGene
-  include Util
-
   attr_reader :colors
 
-  @available_colors = %i[red green blue]
+  AVAILABLE_COLORS = %i(red green blue)
 
   def to_s
     "#{@colors[0]}-#{@colors[1]}"
   end
 
   def initialize(color1, color2 = color1)
-    color1 = symbolic_representation color1 unless color1.instance_of? Symbol
-    color2 = symbolic_representation color2 unless color2.instance_of? Symbol
+    color1 = symbolic_representation(color1) unless color1.instance_of?(Symbol)
+    color2 = symbolic_representation(color2) unless color2.instance_of?(Symbol)
     @colors = [color1, color2]
   end
 
@@ -23,9 +19,9 @@ class ColorGene
     if contains?(:red, :red) || contains?(:red, :blue)
       :red
     elsif contains?(:red, :green)
-      happens_with_probability?(75) ? :red : :green
+      Rand.happens_with_probability?(75) ? :red : :green
     elsif contains?(:green, :blue)
-      happens_with_probability?(75) ? :green : :blue
+      Rand.happens_with_probability?(75) ? :green : :blue
     elsif contains?(:green, :green)
       :green
     else
@@ -47,13 +43,13 @@ class ColorGene
   end
 
   def self.symbolic_representation(color_string)
-    result = @available_colors.find { |available_color| available_color.to_s == color_string }
+    result = AVAILABLE_COLORS.find { |available_color| available_color.to_s == color_string }
     raise ArgumentError, 'Unavailable color' unless result
 
     result
   end
 
   def self.cross(gene1, gene2)
-    ColorGene.new gene1.colors.sample, gene2.colors.sample
+    ColorGene.new(gene1.colors.sample, gene2.colors.sample)
   end
 end

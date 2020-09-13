@@ -7,4 +7,8 @@ class Size
     @w = w
     @h = h
   end
+
+  def self.world
+    @world ||= Size.new(S.window_width, S.window_height)
+  end
 end

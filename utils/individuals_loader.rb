@@ -5,7 +5,6 @@ require_relative 'argv_processor.rb'
 
 class IndividualsLoader
   include REXML
-  include Util
 
   extend ArgvProcessor
 
