@@ -1,7 +1,7 @@
 <data>
   <class name="World">
-    <var name="INDIVIDUALS_NUMBER"          type="Integer">5</var>
-    <var name="FOOD_POINTS_NUMBER"          type="Integer">10</var>
+    <var name="INDIVIDUALS_NUMBER"          type="Integer">20</var>
+    <var name="FOOD_POINTS_NUMBER"          type="Integer">100</var>
   </class>
   <class name="GenWindow">
     <var name="BACKGROUND"                  type="Bool">true</var>
