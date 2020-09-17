@@ -4,9 +4,9 @@
 require 'gosu'
 require 'rmagick'
 
+require_relative 'utils/argv.rb'
 require_relative 'utils/size.rb'
 require_relative 'utils/position.rb'
-require_relative 'utils/argv_processor.rb'
 require_relative 'utils/settings.rb'
 require_relative 'utils/individuals_loader.rb'
 require_relative 'utils/rand.rb'
@@ -19,6 +19,11 @@ require_relative 'app/color_gene.rb'
 require_relative 'app/phenotype.rb'
 require_relative 'app/food.rb'
 require_relative 'app/dying_from_starving.rb'
+
+if Argv.parameter_present?(['d', 'debug'])
+  require 'pry'
+  require 'benchmark'
+end
 
 class GenWindow < Gosu::Window
   def initialize(world)
@@ -71,8 +76,6 @@ class HeadlessProcess
 end
 
 class App
-  extend ArgvProcessor
-
   class << self
     def run
       begin
@@ -82,9 +85,8 @@ class App
       end
       Settings.load
 
-
-      headless_mode = parameter_present?('headless')
-      load_individuals = parameter_present?('loadIndividuals')
+      headless_mode = Argv.parameter_present?('headless')
+      load_individuals = Argv.parameter_present?('loadIndividuals')
 
       world = World.new(load_individuals)
       (headless_mode ? HeadlessProcess : GenWindow).new(world).perform

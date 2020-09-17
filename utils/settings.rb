@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 
 require 'rexml/document'
-require_relative 'argv_processor.rb'
 
 class Settings
   include REXML
-  extend ArgvProcessor
 
   DEFAULT_FILE_NAME = 'data/settings.xml'
 
   def self.load
-    file_name = get_parameter_value('inputFile') || DEFAULT_FILE_NAME
+    file_name = Argv.get_parameter_value('inputFile') || DEFAULT_FILE_NAME
 
     @settings = {}
     @setting_pathes = {}

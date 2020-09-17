@@ -17,8 +17,8 @@ class World
   def update
     update_individuals_list
     @individuals.each do |ind|
-      # ind.near_individuals = near_individuals(ind)
-      # ind.near_food = near_food(ind)
+      ind.near_individuals = near_individuals(ind)
+      ind.near_food = near_food(ind)
       ind.update(self)
       reproduction_pair = ind.get_reproduction_pair
       generate_new_individual(reproduction_pair) if reproduction_pair
@@ -44,17 +44,17 @@ class World
     (1..S.food_points_number).map { Food.new(Rand.position) }
   end
 
-  #private def near_individuals(individual)
-  #  @near_individuals = @individuals.find_all do |ind|
-  #    individual.in_view_scope?(ind) unless individual.equal?(ind)
-  #  end
-  #  @near_individuals.empty? ? nil : near_individuals
-  #end
+  private def near_individuals(individual)
+    individuals = @individuals.find_all do |ind|
+      individual.in_view_scope?(ind) unless individual.equal?(ind)
+    end
+    individuals.empty? ? nil : individuals
+  end
 
-  #private def near_food(individual)
-  #  near_food = @food_points.find_all { |fp| individual.in_view_scope?(fp) }
-  #  near_food.empty? ? nil : near_food
-  #end
+  private def near_food(individual)
+    near_food = @food_points.find_all { |fp| individual.in_view_scope?(fp) }
+    near_food.empty? ? nil : near_food
+  end
 
   private def generate_new_individual(pair)
     genotype = Genotype.genotype_crossing(pair[0].genotype, pair[1].genotype)

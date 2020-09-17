@@ -15,7 +15,7 @@ class Position
   end
 
   def range(pos)
-    (((x - pos.x).abs**2) + ((y - pos.y).abs**2)**0.5)
+    (((x - pos.x)**2) + ((y - pos.y)**2)**0.5)
   end
 
   def move(target, speed)
