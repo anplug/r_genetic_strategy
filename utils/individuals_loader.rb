@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
 require 'rexml/document'
-require_relative 'argv_processor.rb'
 
 class IndividualsLoader
   include REXML
 
-  extend ArgvProcessor
-
   DEFAULT_FILE_NAME = 'data/individuals.xml'
 
   def self.load
-    file_name = get_parameter_value('individualsFile') || DEFAULT_FILE_NAME
+    file_name = Argv.get_parameter_value('individualsFile') || DEFAULT_FILE_NAME
 
     document = Document.new(File.new(file_name))
 

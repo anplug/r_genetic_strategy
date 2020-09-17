@@ -16,7 +16,7 @@ class GameObject
   end
 
   def range(obj)
-    @position.range obj.position
+    @position.range(obj.position)
   end
 
   protected def update_sprite(image_size)

@@ -3,7 +3,7 @@
 class Individual < GameObject
   attr_reader :id, :genotype, :phenotype, :reproduction_pair, :is_dead
 
-  #attr_accessor :near_individuals, :near_food
+  attr_accessor :near_individuals, :near_food
 
   def self.new(*args, &block)
     @index ||= -1
@@ -86,13 +86,13 @@ class Individual < GameObject
     temp
   end
 
-  #def in_view_scope?(obj)
-  #  if obj.instance_of?(Individual)
-  #    (@position.range(obj.position) - obj.phenotype.absolute_size / 2) <= @phenotype.view_scope
-  #  else
-  #    @position.range(obj.position) <= @phenotype.view_scope
-  #  end
-  #end
+  def in_view_scope?(obj)
+    if obj.instance_of?(Individual)
+      (@position.range(obj.position) - obj.phenotype.absolute_size / 2) <= @phenotype.view_scope
+    else
+      @position.range(obj.position) <= @phenotype.view_scope
+    end
+  end
 
   private def need_to_update_sprite?
     if @need_to_update_sprite
@@ -182,7 +182,7 @@ class Individual < GameObject
     end
     @target = generate_random_target if @target.nil?
 
-    @position.move @target, @phenotype.speed
+    @position.move(@target, @phenotype.speed)
     true
   end
 
@@ -222,7 +222,7 @@ class Individual < GameObject
     else
       log 'Im active!'
       @active = true
-      answer = @target.reproduction_proposal self
+      answer = @target.reproduction_proposal(self)
       if answer
         @pair = @target
         @in_reproduction = true
@@ -233,7 +233,7 @@ class Individual < GameObject
     end
   end
 
-  private def reproduction_proposal(pair)
+  protected def reproduction_proposal(pair)
     if suitable_individual(pair)
       log 'Im passive!'
       @passive = true
@@ -271,11 +271,11 @@ class Individual < GameObject
     @near_individuals ? closest_object(@near_individuals) : nil # most atractive
   end
 
-  private def closest_object(objects_arr)
-    if objects_arr.size == 1
-      closest_obj = objects_arr.first
+  private def closest_object(objects)
+    if objects.count == 1
+      closest_obj = objects.first
     else
-      obj_range_hash = create_obj_range_hash objects_arr
+      obj_range_hash = create_obj_range_hash(objects)
       closest_obj = obj_range_hash.max_by { |_k, v| v }.first
     end
     log "Closest #{closest_obj.class} is #{closest_obj}"
@@ -283,16 +283,14 @@ class Individual < GameObject
   end
 
   private def create_obj_range_hash(objects_arr)
-    objects_arr.each_with_object({}) do |elem, result|
-      result[elem] = range elem
-    end
+    objects_arr.each_with_object({}) { |elem, result| result[elem] = range(elem) }
   end
 
   private def target_is_object?
     @target && !@target.instance_of?(Position)
   end
 
-  private def stronger?(strength)
+  protected def stronger?(strength)
     @phenotype.strength > strength
   end
 
