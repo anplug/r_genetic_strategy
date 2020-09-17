@@ -10,4 +10,5 @@ group 'development' do
   gem 'pry'
   gem 'pry-nav'
   gem 'rubocop', require: false
+  gem 'benchmark-memory'
 end
