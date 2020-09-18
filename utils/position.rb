@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'native.rb'
+
 class Position
   attr_accessor :x, :y
 
@@ -15,7 +17,7 @@ class Position
   end
 
   def range(pos)
-    (((x - pos.x)**2) + ((y - pos.y)**2)**0.5)
+    Native.range(x, pos.x, y, pos.y)
   end
 
   def move(target, speed)
