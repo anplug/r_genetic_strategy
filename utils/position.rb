@@ -21,7 +21,7 @@ class Position
   end
 
   def move(target, speed)
-    target = get_real_position target
+    target = get_real_position(target)
     x_ratio = if (target.y - @y).zero? then 1
               else (target.x - @x) / (target.y - @y).abs
               end
@@ -45,7 +45,7 @@ class Position
   end
 
   def get_real_position(pos)
-    if pos.instance_of? Position
+    if pos.instance_of?(Position)
       pos
     else
       pos.position

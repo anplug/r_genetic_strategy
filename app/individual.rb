@@ -180,16 +180,10 @@ class Individual < GameObject
       make_action
       return false
     end
-    @target = generate_random_target if @target.nil?
+    @target = Rand.position if @target.nil?
 
     @position.move(@target, @phenotype.speed)
     true
-  end
-
-  private def generate_random_target
-    target = Rand.position
-    # puts "Generate target = #{@position} -> #{target}, searching..."
-    target
   end
 
   private def have_business?
