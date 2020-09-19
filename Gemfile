@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gem 'gosu'
 gem 'rmagick'
+gem 'RubyInline'
 
 group 'development' do
   gem 'pry'
