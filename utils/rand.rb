@@ -15,6 +15,10 @@ class Rand
     rand * (max - min) + min
   end
 
+  def self.float_to(to)
+    rand * to
+  end
+
   def self.position(size = Size.world)
     Position.new(rand(size.w), rand(size.h))
   end

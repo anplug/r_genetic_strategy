@@ -15,16 +15,8 @@
 # optimized_inlined   8.261842   0.000060   8.261902 (  8.293217)
 # c                   5.661242   0.000036   5.661278 (  5.683370)
 
-require 'pry'
-require 'benchmark'
-require 'benchmark-memory'
-require 'inline'
-require_relative 'utils/position.rb'
-require_relative 'utils/rand.rb'
-require_relative 'utils/size.rb'
-
 size = Size.new(480, 640)
-iterations = 50_000_000
+iterations = 100_000
 positions = (1..(iterations * 2)).map { Rand.position(size) }
 
 puts 'Positions generated'
@@ -34,18 +26,6 @@ sum2 = 0
 sum3 = 0
 sum4 = 0
 sum5 = 0
-
-class Inlined
-  inline do |builder|
-    builder.include('<math.h>')
-    builder.c '
-      double range(short int p1_x, short int p1_y, short int p2_x, short int p2_y) {
-        return sqrt(pow(p1_x - p2_x, 2) + pow(p1_y - p2_y, 2));
-      }'
-  end
-end
-
-inlined = Inlined.new
 
 def range(pos1, pos2)
   ((pos1.x - pos2.x).abs**2 + (pos1.y - pos2.y).abs**2)**0.5
@@ -76,7 +56,7 @@ Benchmark.bmbm(8) do |x|
 
   x.report('original_inlined') do
     iterations.times do |i|
-      sum2 += irange(positions[i].x, positions[i].y, positions[i + 1].x, positions[i + 1].y)
+      sum2 += irange(positions[i].x, positions[i + 1].x, positions[i].y, positions[i + 1].y)
     end
   end
 
@@ -88,13 +68,13 @@ Benchmark.bmbm(8) do |x|
 
   x.report('optimized_inlined') do
     iterations.times do |i|
-      sum4 += oirange(positions[i].x, positions[i].y, positions[i + 1].x, positions[i + 1].y)
+      sum4 += oirange(positions[i].x, positions[i + 1].x, positions[i].y, positions[i + 1].y)
     end
   end
 
   x.report('c') do
     iterations.times do |i|
-      sum5 += inlined.range(positions[i].x, positions[i].y, positions[i + 1].x, positions[i + 1].y)
+      sum5 += Native.range(positions[i].x, positions[i].y, positions[i + 1].x, positions[i + 1].y)
     end
   end
 end
