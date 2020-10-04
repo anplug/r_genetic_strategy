@@ -182,7 +182,7 @@ class Individual < GameObject
     end
     @target = Rand.position if @target.nil?
 
-    @position.move(@target, @phenotype.speed)
+    @position.move!(@target, @phenotype.speed)
     true
   end
 

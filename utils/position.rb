@@ -20,8 +20,14 @@ class Position
     Native.range(x, pos.x, y, pos.y)
   end
 
-  def move(target, speed)
+  def move!(target, speed)
     target = get_real_position(target)
+
+    #res = Native.move(x, y, target.x, target.y, speed)
+
+    #@x = res >> 16;
+    #@y = res & 65535;
+
     x_ratio = if (target.y - @y).zero? then 1
               else (target.x - @x) / (target.y - @y).abs
               end
@@ -45,10 +51,6 @@ class Position
   end
 
   def get_real_position(pos)
-    if pos.instance_of?(Position)
-      pos
-    else
-      pos.position
-    end
+    pos.instance_of?(Position) ? pos : pos.position
   end
 end
