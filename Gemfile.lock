@@ -18,7 +18,7 @@ GEM
       pry (>= 0.9.10, < 0.13.0)
     rainbow (3.0.0)
     regexp_parser (1.7.1)
-    rexml (3.2.4)
+    rexml (3.2.5)
     rmagick (4.1.2)
     rubocop (0.90.0)
       parallel (~> 1.10)
