@@ -5,21 +5,6 @@ class Individual < GameObject
 
   attr_accessor :near_individuals, :near_food
 
-  def self.new(*args, &block)
-    @index ||= -1
-    @index += 1
-    new_args = [@index] + args
-    obj = allocate
-    obj.send :initialize, *new_args, &block
-    write_statistics(obj)
-    obj
-  end
-
-  def self.write_statistics(obj)
-    file = File.new 'statistics', 'a+'
-    file.puts("Created individual {#{obj.id}}:\t#{obj.fitness_function}\n#{obj.genotype.info}")
-  end
-
   def fitness_function
     result = @genotype.strength_gene     * 0.35 +
              @genotype.sight_gene        * 0.30 +
@@ -29,10 +14,14 @@ class Individual < GameObject
     result / 5
   end
 
-  protected def initialize(id,
-                           position: Rand.position,
-                           genotype: Genotype.new,
+  protected def initialize(id:,
+                           position:,
+                           genotype:,
                            phenotype: nil)
+
+    position = position || Rand.position
+    genotype = genotype || Genotype.new
+
     super(position)
     @id = id
     @genotype = genotype

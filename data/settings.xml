@@ -1,6 +1,6 @@
 <data>
   <class name="world">
-    <var name="individuals_amount"          type="Integer">20</var>
+    <var name="individuals_amount"          type="Integer">2</var>
     <var name="food_points_number"          type="Integer">100</var>
   </class>
   <class name="gen_window">
