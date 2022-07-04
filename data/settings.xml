@@ -4,8 +4,6 @@
     <var name="food_points_number"          type="Integer">100</var>
   </class>
   <class name="gen_window">
-    <var name="background"                  type="Bool">true</var>
-    <var name="background_color"            type="Hex">0xffffffff</var>
     <var name="fps" 			                  type="Float">30</var>
     <var name="window_caption" 	            type="String">GenSimulating</var>
     <var name="window_width" 	              type="Integer">1200</var>

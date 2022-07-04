@@ -47,19 +47,7 @@ class GenWindow < Gosu::Window
   end
 
   def draw
-    draw_background if S.background
     @world.draw
-  end
-
-  def draw_background
-    color = Gosu::Color.argb(S.background_color)
-    draw_quad(
-      0, 0, color,
-      S.window_width, 0, color,
-      0, S.window_height, color,
-      S.window_width, S.window_height, color,
-      0
-    )
   end
 end
 
@@ -89,7 +77,8 @@ class App
       load_individuals = Argv.parameter_present?('loadIndividuals')
 
       world = World.new(load_individuals)
-      (headless_mode ? HeadlessProcess : GenWindow).new(world).perform
+      $env = (headless_mode ? HeadlessProcess : GenWindow).new(world)
+      $env.perform
     end
   end
 end
