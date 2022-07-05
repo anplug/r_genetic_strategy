@@ -2,8 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'gosu'
-gem 'rmagick'
+gem 'gosu', '1.4.3'
 gem 'RubyInline'
 
 group 'development' do

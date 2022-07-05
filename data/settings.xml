@@ -1,12 +1,10 @@
 <data>
   <class name="world">
-    <var name="individuals_amount"          type="Integer">20</var>
+    <var name="individuals_amount"          type="Integer">30</var>
     <var name="food_points_number"          type="Integer">100</var>
   </class>
   <class name="gen_window">
-    <var name="background"                  type="Bool">true</var>
-    <var name="background_color"            type="Hex">0xffffffff</var>
-    <var name="fps" 			                  type="Float">30</var>
+    <var name="fps" 			                  type="Float">140</var>
     <var name="window_caption" 	            type="String">GenSimulating</var>
     <var name="window_width" 	              type="Integer">1200</var>
     <var name="window_height" 	            type="Integer">900</var>
@@ -15,7 +13,6 @@
     <var name="hungry_border" 	              type="Float">0.8</var>
     <var name="starving_border" 	            type="Float">0.2</var>
     <var name="food_per_point"                type="Float">0.3</var>
-    <var name="image_size" 		                type="Float">50</var>
     <var name="age_mutation_probability" 	    type="Float">10</var>
     <var name="iterations_after_reproducting" type="Integer">2000</var>
     <var name="reproduction_phase_time" 	    type="Integer">250</var>
@@ -47,7 +44,6 @@
     <var name="default_reproduction_gene" type="Float">0.2</var>
   </class>
   <class name="food">
-    <var name="image_size" 		            type="Integer">10</var>
-    <var name="default_saturation" 	      type="Integer">2</var>
+    <var name="default_saturation" 	      type="Integer">5</var>
   </class>
 </data>

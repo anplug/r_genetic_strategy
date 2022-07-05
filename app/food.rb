@@ -3,14 +3,17 @@
 class Food < GameObject
   def initialize(position, saturation = S.default_saturation)
     super(position)
-    @saturation = saturation >= S.image_size(:food)**2 ? S.image_size(:food)**2 : saturation
+    @saturation = saturation
     @eaten = false
     @owner = nil
-
-    update_sprite
+    @color = Gosu::Color.argb(0xffffffff)
   end
 
   attr_reader :owner
+
+  def self.default_size
+    S.default_saturation / 2
+  end
 
   def to_s
     "<Food at #{@position}>"
@@ -24,7 +27,7 @@ class Food < GameObject
 
   def update
     if @eaten
-      update_sprite
+      # That's interesting
       @eaten = false
     end
   end
@@ -36,28 +39,23 @@ class Food < GameObject
     eat
   end
 
+  def draw
+    size = @saturation / 2
+
+    $env.draw_quad(
+      position.x - size, position.y - size, @color,
+      position.x + size, position.y - size, @color,
+      position.x - size, position.y + size, @color,
+      position.x + size, position.y + size, @color,
+      0, :default
+    )
+
+    super
+  end
+
   private def eat
     @saturation -= 1
     @eaten = true
     true
-  end
-
-  private def update_sprite
-    super(S.image_size(:food))
-    line = Magick::Draw.new
-    full_lines = self.full_lines
-    full_lines.times do |index|
-      line.line(0, index, S.image_size(:food) - 1, index)
-    end
-    line.line(0, full_lines, last_line_length - 1, full_lines) if last_line_length != 0
-    line.draw(sprite) unless @eaten
-  end
-
-  protected def full_lines
-    @saturation / S.image_size(:food)
-  end
-
-  protected def last_line_length
-    @saturation % S.image_size(:food)
   end
 end

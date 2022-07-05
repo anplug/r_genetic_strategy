@@ -2,6 +2,7 @@
 
 class World
   def initialize(load_individuals)
+    @new_individual_index = 1
     @individuals = init_individuals(load_individuals)
     @food_points = init_food_points
 
@@ -31,17 +32,21 @@ class World
   private def init_individuals(load_individuals)
     if load_individuals
       IndividualsLoader.load.map do |ind|
-        Individual.new(position: ind[:position],
-                       genotype: ind[:genotype],
-                       phenotype: ind[:phenotype])
+        add_individual(
+          position: ind[:position],
+          genotype: ind[:genotype],
+          phenotype: ind[:phenotype]
+        )
       end
     else
-      (1..S.individuals_amount).map { Individual.new }
+      (1..S.individuals_amount).map { add_individual }
     end
   end
 
   private def init_food_points
-    (1..S.food_points_number).map { Food.new(Rand.position) }
+    (1..S.food_points_number).map do
+      Food.new(Rand.position(padding: Food.default_size))
+    end
   end
 
   private def near_individuals(individual)
@@ -57,9 +62,24 @@ class World
   end
 
   private def generate_new_individual(pair)
-    genotype = Genotype.genotype_crossing(pair[0].genotype, pair[1].genotype)
-    position = Position.new(pair.first.position.x, pair.first.position.y)
-    @new_individuals << Individual.new(position: position, genotype: genotype)
+    @new_individuals << add_individual(
+      genotype: Genotype.genotype_crossing(pair[0].genotype, pair[1].genotype),
+      position: Position.new(pair.first.position.x, pair.first.position.y)
+    )
+  end
+
+  def add_individual(genotype: nil, position: nil, phenotype: nil)
+    new_individual = Individual.new(id: @new_individual_index,
+                                    position:, genotype:, phenotype:)
+
+    write_statistics(new_individual)
+    @new_individual_index += 1
+    new_individual
+  end
+
+  def write_statistics(ind)
+    file = File.new 'statistics', 'a+'
+    file.puts("Created individual {#{ind.id}}:\t#{ind.fitness_function}\n#{ind.genotype.info}")
   end
 
   private def kill_individual(ind)
