@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require 'rmagick'
 
 require_relative 'utils/argv.rb'
 require_relative 'utils/size.rb'

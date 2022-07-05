@@ -3,13 +3,17 @@
 class Food < GameObject
   def initialize(position, saturation = S.default_saturation)
     super(position)
-    @saturation = saturation >= S.image_size(:food)**2 ? S.image_size(:food)**2 : saturation
+    @saturation = saturation
     @eaten = false
     @owner = nil
     @color = Gosu::Color.argb(0xffffffff)
   end
 
   attr_reader :owner
+
+  def self.default_size
+    S.default_saturation / 2
+  end
 
   def to_s
     "<Food at #{@position}>"
@@ -36,15 +40,17 @@ class Food < GameObject
   end
 
   def draw
-    size = @saturation
+    size = @saturation / 2
 
     $env.draw_quad(
-      position.x,        position.y,        @color,
-      position.x + size, position.y,        @color,
+      position.x - size, position.y - size, @color,
+      position.x + size, position.y - size, @color,
+      position.x - size, position.y + size, @color,
       position.x + size, position.y + size, @color,
-      position.x,        position.y + size, @color,
       0, :default
     )
+
+    super
   end
 
   private def eat

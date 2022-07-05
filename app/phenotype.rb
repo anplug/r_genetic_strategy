@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Phenotype
-  attr_reader :color, :attractiveness, :age, :strength, :size, :speed, :view_scope
+  attr_reader :color, :color_tech, :attractiveness, :age, :strength, :size, :speed, :view_scope
   attr_accessor :satiety
 
   def initialize(genotype,
@@ -12,6 +12,7 @@ class Phenotype
                  speed = S.default_speed,
                  view_scope = S.default_view_scope)
     @color = genotype.color_gene.generate_real_color
+    @color_tech = ColorGene.map_to_gosu(@color)
     @age = age
     @strength = strength
     @size = size

@@ -3,12 +3,15 @@
 class GameObject
   attr_reader :sprite, :position
 
+  RED = Gosu::Color.argb(0xffff0000)
+
   def initialize(position)
     @position = position
   end
 
   def draw
-    Gosu::Image.new(sprite).draw(position.x, position.y, 1)
+    # Drawing center
+    $env.draw_rect(position.x, position.y, 1, 1, RED, 0, :default)
   end
 
   def log(message)
@@ -17,10 +20,5 @@ class GameObject
 
   def range(obj)
     @position.range(obj.position)
-  end
-
-  protected def update_sprite(image_size)
-    @sprite = Magick::Image.new(image_size, image_size)
-    sprite.matte_reset!
   end
 end

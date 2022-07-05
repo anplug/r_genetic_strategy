@@ -33,6 +33,14 @@ class ColorGene
     (@colors[0] == color1 && @colors[1] == color2) || (@colors[1] == color1 && @colors[0] == color2)
   end
 
+  def self.map_to_gosu(color)
+    case color
+    when :red then Gosu::Color.argb(0xffff0000)
+    when :green then Gosu::Color.argb(0xff00ff00)
+    when :blue then Gosu::Color.argb(0xff0000ff)
+    end
+  end
+
   def self.init(color_string)
     colors = color_string.split
     if colors.size >= 2

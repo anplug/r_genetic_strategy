@@ -44,7 +44,9 @@ class World
   end
 
   private def init_food_points
-    (1..S.food_points_number).map { Food.new(Rand.position) }
+    (1..S.food_points_number).map do
+      Food.new(Rand.position(padding: Food.default_size))
+    end
   end
 
   private def near_individuals(individual)

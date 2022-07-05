@@ -15,7 +15,8 @@ class Rand
     rand * (max - min) + min
   end
 
-  def self.position(size = Size.world)
-    Position.new(rand(size.w), rand(size.h))
+  def self.position(size = Size.world, padding: 0)
+    Position.new(rand(size.w - padding * 2) + padding,
+                 rand(size.h - padding * 2) + padding)
   end
 end

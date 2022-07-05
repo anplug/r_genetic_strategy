@@ -45,8 +45,6 @@ class Individual < GameObject
     @passive = false
 
     @is_dead = false
-
-    update_sprite
   end
 
   def update(_world)
@@ -58,9 +56,33 @@ class Individual < GameObject
       @is_moving = false
     end
     @phenotype.update(@genotype, @is_moving)
-    update_sprite if @phenotype.update_sprite?
   rescue DyingFromStarving
     @is_dead = true
+  end
+
+  def draw
+    size = @phenotype.absolute_size
+    color = @phenotype.color_tech
+
+    $env.draw_quad(
+      position.x - size, position.y       , color,
+      position.x,        position.y + size, color,
+      position.x + size, position.y       , color,
+      position.x,        position.y - size, color,
+      0, :default
+    )
+
+    inner_size = size * 0.7
+
+    $env.draw_quad(
+      position.x - inner_size, position.y - inner_size, color,
+      position.x + inner_size, position.y - inner_size, color,
+      position.x - inner_size, position.y + inner_size, color,
+      position.x + inner_size, position.y + inner_size, color,
+      0, :default
+    )
+
+    super
   end
 
   def to_s
@@ -89,18 +111,6 @@ class Individual < GameObject
       return true
     end
     false
-  end
-
-  private def update_sprite
-    log 'Updating image !'
-    image_size = S.image_size(:individual)
-    super(image_size)
-
-    circle = Magick::Draw.new
-    circle.fill(@phenotype.color.to_s)
-    circle.circle(image_size / 2, image_size / 2,
-                  image_size / 2, image_size / 2 + @phenotype.absolute_size)
-    circle.draw(sprite)
   end
 
   private def make_decision
