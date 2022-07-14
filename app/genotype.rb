@@ -36,7 +36,7 @@ class Genotype
 
   def set(field, val)
     if field == 'color_gene'
-      @color_gene = ColorGene.init val
+      @color_gene = ColorGene.init(val)
     else
       command = "@#{field} = #{val}"
       eval(command)
@@ -44,7 +44,7 @@ class Genotype
   end
 
   def self.genotype_crossing(genotype1, genotype2)
-    cross mutate_genotype(genotype1), mutate_genotype(genotype2)
+    cross(mutate_genotype(genotype1), mutate_genotype(genotype2))
   end
 
   def self.mutate_genotype(genotype)

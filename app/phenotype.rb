@@ -50,11 +50,11 @@ class Phenotype
 
   def update(genotype, is_moving)
     update_age
-    update_strength genotype
-    update_size genotype
+    update_strength(genotype)
+    update_size(genotype)
     update_speed
     update_view_scope genotype
-    update_satiety is_moving
+    update_satiety(is_moving)
   end
 
   # Parameter updaters
@@ -68,7 +68,7 @@ class Phenotype
   end
 
   def update_size(genotype)
-    # TODO : individual's size doesn't have to have restriction
+    # TODO : individual's size should not have to have restriction
     unless maximum_size?
       prev_size = absolute_size
       feed_factor = positive_feed_factor

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'native.rb'
+require_relative 'native'
 
 class Position
   attr_accessor :x, :y
@@ -21,7 +21,7 @@ class Position
   end
 
   def move(target, speed)
-    target = get_real_position target
+    target = get_real_position(target)
     x_ratio = if (target.y - @y).zero? then 1
               else (target.x - @x) / (target.y - @y).abs
               end
@@ -40,12 +40,12 @@ class Position
   end
 
   def ==(pos)
-    pos = get_real_position pos
+    pos = get_real_position(pos)
     (pos.x - @x).abs <= 1.0 && (pos.y - @y).abs <= 1.0
   end
 
   def get_real_position(pos)
-    if pos.instance_of? Position
+    if pos.instance_of?(Position)
       pos
     else
       pos.position

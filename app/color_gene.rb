@@ -5,14 +5,14 @@ class ColorGene
 
   AVAILABLE_COLORS = %i(red green blue)
 
-  def to_s
-    "#{@colors[0]}-#{@colors[1]}"
-  end
-
   def initialize(color1, color2 = color1)
     color1 = symbolic_representation(color1) unless color1.instance_of?(Symbol)
     color2 = symbolic_representation(color2) unless color2.instance_of?(Symbol)
     @colors = [color1, color2]
+  end
+
+  def to_s
+    "#{@colors[0]}-#{@colors[1]}"
   end
 
   def generate_real_color

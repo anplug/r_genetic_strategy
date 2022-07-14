@@ -78,7 +78,7 @@ class World
   end
 
   def write_statistics(ind)
-    file = File.new 'statistics', 'a+'
+    file = File.new('statistics', 'a+')
     file.puts("Created individual {#{ind.id}}:\t#{ind.fitness_function}\n#{ind.genotype.info}")
   end
 
