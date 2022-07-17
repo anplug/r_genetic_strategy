@@ -1,0 +1,41 @@
+AllCops:
+  NewCops: enable
+
+Style/Documentation:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 14
+  Exclude:
+    - 'app/individual.rb'
+
+Naming/MethodParameterName:
+  AllowedNames: x, y, w, h, id
+
+Style/GlobalVars:
+  Exclude:
+    - 'gen_life.rb'
+    - 'app/food.rb'
+    - 'app/game_object.rb'
+    - 'app/individual.rb'
+
+Lint/ElseLayout:
+  Exclude:
+    - 'utils/position.rb'
+
+Style/AccessModifierDeclarations:
+  Exclude:
+    - 'app/food.rb'
+    - 'app/individual.rb'
+    - 'app/world.rb'
+
+Layout/SpaceBeforeComma:
+  Exclude:
+    - 'app/individual.rb'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/individual.rb'

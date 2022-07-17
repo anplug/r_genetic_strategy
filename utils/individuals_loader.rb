@@ -28,9 +28,10 @@ class IndividualsLoader
 
   def self.parse_element(element)
     name = element.attributes['name']
-    if    name == 'position'  then @position = parse_position(element.text)
-    elsif name == 'Genotype'  then @genotype = parse_genotype(element)
-    elsif name == 'Phenotype' then @phenotype = parse_phenotype(element)
+    case name
+    when 'position'  then @position = parse_position(element.text)
+    when 'Genotype'  then @genotype = parse_genotype(element)
+    when 'Phenotype' then @phenotype = parse_phenotype(element)
     end
   end
 

@@ -3,23 +3,23 @@
 
 require 'gosu'
 
-require_relative 'utils/argv.rb'
-require_relative 'utils/size.rb'
-require_relative 'utils/position.rb'
-require_relative 'utils/settings.rb'
-require_relative 'utils/individuals_loader.rb'
-require_relative 'utils/rand.rb'
+require_relative 'utils/argv'
+require_relative 'utils/size'
+require_relative 'utils/position'
+require_relative 'utils/settings'
+require_relative 'utils/individuals_loader'
+require_relative 'utils/rand'
 
-require_relative 'app/world.rb'
-require_relative 'app/game_object.rb'
-require_relative 'app/individual.rb'
-require_relative 'app/genotype.rb'
-require_relative 'app/color_gene.rb'
-require_relative 'app/phenotype.rb'
-require_relative 'app/food.rb'
-require_relative 'app/dying_from_starving.rb'
+require_relative 'app/world'
+require_relative 'app/game_object'
+require_relative 'app/individual'
+require_relative 'app/genotype'
+require_relative 'app/color_gene'
+require_relative 'app/phenotype'
+require_relative 'app/food'
+require_relative 'app/dying_from_starving'
 
-if Argv.parameter_present?(['d', 'debug'])
+if Argv.parameter_present?(%w[d debug])
   require 'pry'
   require 'benchmark'
 end
@@ -31,7 +31,7 @@ class GenWindow < Gosu::Window
     super(S.window_width, S.window_height,
           fullscreen: false,
           resizable: false,
-          update_interval: update_interval)
+          update_interval:)
     self.caption = S.window_caption
   end
 
@@ -56,7 +56,7 @@ class HeadlessProcess
   end
 
   def perform
-    while true
+    loop do
       @world.update
     end
   end

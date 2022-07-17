@@ -3,11 +3,7 @@
 class ColorGene
   attr_reader :colors
 
-  AVAILABLE_COLORS = %i(red green blue)
-
-  def to_s
-    "#{@colors[0]}-#{@colors[1]}"
-  end
+  AVAILABLE_COLORS = %i[red green blue].freeze
 
   def initialize(color1, color2 = color1)
     color1 = symbolic_representation(color1) unless color1.instance_of?(Symbol)
@@ -15,6 +11,11 @@ class ColorGene
     @colors = [color1, color2]
   end
 
+  def to_s
+    "#{@colors[0]}-#{@colors[1]}"
+  end
+
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def generate_real_color
     if contains?(:red, :red) || contains?(:red, :blue)
       :red
@@ -28,6 +29,7 @@ class ColorGene
       :blue
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def contains?(color1, color2)
     (@colors[0] == color1 && @colors[1] == color2) || (@colors[1] == color1 && @colors[0] == color2)

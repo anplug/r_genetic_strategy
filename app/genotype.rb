@@ -4,6 +4,7 @@ class Genotype
   attr_reader :survival_gene, :color_gene, :size_gene,
               :strength_gene, :sight_gene, :reproduction_gene
 
+  # rubocop:disable Metrics/ParameterLists
   def initialize(color_gene = ColorGene.init(S.default_color_gene),
                  survival_gene = S.default_survival_gene,
                  size_gene = S.default_size_gene,
@@ -17,6 +18,7 @@ class Genotype
     @sight_gene = sight_gene
     @reproduction_gene = reproduction_gene
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def to_s
     # "#{@survival_gene.round 3}, #{@size_gene.round 3}, #{@strength_gene.round 3}"
@@ -36,7 +38,7 @@ class Genotype
 
   def set(field, val)
     if field == 'color_gene'
-      @color_gene = ColorGene.init val
+      @color_gene = ColorGene.init(val)
     else
       command = "@#{field} = #{val}"
       eval(command)
@@ -44,7 +46,7 @@ class Genotype
   end
 
   def self.genotype_crossing(genotype1, genotype2)
-    cross mutate_genotype(genotype1), mutate_genotype(genotype2)
+    cross(mutate_genotype(genotype1), mutate_genotype(genotype2))
   end
 
   def self.mutate_genotype(genotype)
@@ -58,7 +60,7 @@ class Genotype
                  mutated_strength_gene, mutated_sight_gene, mutated_reproduction_gene)
   end
 
-  def self.cross(genotype1, genotype2)
+  def self.cross(genotype1, genotype2) # rubocop:disable Metrics/AbcSize
     color_gene = ColorGene.cross(genotype1.color_gene, genotype2.color_gene)
     size_gene = cross_gene(genotype1.size_gene, genotype2.size_gene)
     strength_gene = cross_gene(genotype1.strength_gene, genotype2.strength_gene)
@@ -71,7 +73,7 @@ class Genotype
   end
 
   def self.mutate_gene(gene)
-    Rand.in_range(gene / 2, gene + gene / 2)
+    Rand.in_range(gene / 2, gene + (gene / 2))
   end
 
   def self.cross_gene(gene1, gene2)

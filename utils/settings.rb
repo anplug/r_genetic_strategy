@@ -19,6 +19,7 @@ class Settings
     end
   end
 
+  # rubocop:disable Lint/DuplicateBranch, Metrics/AbcSize
   def self.insert_record(category_elem, elem)
     return false unless elem.instance_of?(Element)
 
@@ -37,6 +38,7 @@ class Settings
 
     set_setting(category, name, value)
   end
+  # rubocop:enable Lint/DuplicateBranch, Metrics/AbcSize
 
   def self.set_setting(category, name, value)
     puts "#{category} -> #{name}=#{value} (#{value.class})"
@@ -50,17 +52,14 @@ class Settings
   end
 
   def self.parse_bool(str)
-    if str == 'false' || str == 'False'
-      false
-    else
-      true
-    end
+    %w[false False].include?(str)
   end
 
   # Get settings here
   def self.method_missing(*args)
     name = args.first
     categories = @setting_pathes[name]
+
     raise "Property #{name} not found" if categories.nil?
 
     return @settings[categories.first][name] if categories.size == 1
@@ -74,6 +73,12 @@ class Settings
     end
 
     @settings[category][name]
+  end
+
+  def self.respond_to_missing?(method_name, _include_private = false)
+    return false if @setting_pathes[method_name].nil?
+
+    true
   end
 end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'native.rb'
+require_relative 'native'
 
 class Position
   attr_accessor :x, :y
@@ -16,12 +16,12 @@ class Position
     puts @x, @y
   end
 
-  def range(pos)
-    Native.range(x, pos.x, y, pos.y)
+  def range(other)
+    Native.range(x, other.x, y, other.y)
   end
 
-  def move(target, speed)
-    target = get_real_position target
+  def move(target, speed) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    target = get_real_position(target)
     x_ratio = if (target.y - @y).zero? then 1
               else (target.x - @x) / (target.y - @y).abs
               end
@@ -39,16 +39,16 @@ class Position
     @y += y_ratio * speed
   end
 
-  def ==(pos)
-    pos = get_real_position pos
-    (pos.x - @x).abs <= 1.0 && (pos.y - @y).abs <= 1.0
+  def ==(other)
+    other = get_real_position(other)
+    (other.x - @x).abs <= 1.0 && (other.y - @y).abs <= 1.0
   end
 
-  def get_real_position(pos)
-    if pos.instance_of? Position
-      pos
+  def get_real_position(other)
+    if other.instance_of?(Position)
+      other
     else
-      pos.position
+      other.position
     end
   end
 end
