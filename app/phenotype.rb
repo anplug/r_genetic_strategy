@@ -4,6 +4,7 @@ class Phenotype
   attr_reader :color, :color_tech, :attractiveness, :age, :strength, :size, :speed, :view_scope
   attr_accessor :satiety
 
+  # rubocop:disable Metrics/ParameterLists
   def initialize(genotype,
                  attractiveness = S.default_attractiveness,
                  age = S.default_age,
@@ -23,6 +24,7 @@ class Phenotype
 
     @update_sprite_flag = false
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def update_sprite?
     @update_sprite_flag
@@ -69,13 +71,13 @@ class Phenotype
 
   def update_size(genotype)
     # TODO : individual's size should not have to have restriction
-    unless maximum_size?
-      prev_size = absolute_size
-      feed_factor = positive_feed_factor
-      val = genotype.size_gene * S.size_incr * feed_factor
-      @size += val
-      @update_sprite_flag = absolute_size.to_i - prev_size.to_i != 0
-    end
+    return if maximum_size?
+
+    prev_size = absolute_size
+    feed_factor = positive_feed_factor
+    val = genotype.size_gene * S.size_incr * feed_factor
+    @size += val
+    @update_sprite_flag = absolute_size.to_i - prev_size.to_i != 0
   end
 
   def update_speed
@@ -93,7 +95,8 @@ class Phenotype
       @satiety = 0
       raise DyingFromStarving
     end
-    @satiety -= (S.satiety_incr * @size * positive_feed_factor + (is_moving ? S.satiety_incr : 0))
+    @satiety -= ((S.satiety_incr * @size * positive_feed_factor) +
+                 (is_moving ? S.satiety_incr : 0))
   end
 
   def set(field, val)

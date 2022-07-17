@@ -12,11 +12,11 @@ class Rand
   end
 
   def self.in_range(min, max)
-    rand * (max - min) + min
+    (rand * (max - min)) + min
   end
 
   def self.position(size = Size.world, padding: 0)
-    Position.new(rand(size.w - padding * 2) + padding,
-                 rand(size.h - padding * 2) + padding)
+    Position.new(rand(size.w - (padding * 2)) + padding,
+                 rand(size.h - (padding * 2)) + padding)
   end
 end

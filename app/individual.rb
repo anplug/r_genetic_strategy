@@ -1,26 +1,22 @@
 # frozen_string_literal: true
 
-class Individual < GameObject
-  attr_reader :id, :genotype, :phenotype, :reproduction_pair, :is_dead
+class Individual < GameObject # rubocop:disable Metrics/ClassLength
+  attr_reader :id, :genotype, :phenotype, :is_dead
 
   attr_accessor :near_individuals, :near_food
 
   def fitness_function
-    result = @genotype.strength_gene     * 0.35 +
-             @genotype.sight_gene        * 0.30 +
-             @genotype.survival_gene     * 0.20 +
-             @genotype.reproduction_gene * 0.10 +
-             @genotype.size_gene         * 0.05
+    result = (@genotype.strength_gene     * 0.35) +
+             (@genotype.sight_gene        * 0.30) +
+             (@genotype.survival_gene     * 0.20) +
+             (@genotype.reproduction_gene * 0.10) +
+             (@genotype.size_gene         * 0.05)
     result / 5
   end
 
-  protected def initialize(id:,
-                           position:,
-                           genotype:,
-                           phenotype: nil)
-
-    position = position || Rand.position
-    genotype = genotype || Genotype.new
+  protected def initialize(id:, position:, genotype:, phenotype: nil)
+    position ||= Rand.position
+    genotype ||= Genotype.new
 
     super(position)
     @id = id
@@ -48,12 +44,12 @@ class Individual < GameObject
   end
 
   def update(_world)
-    if !in_reproduction?
+    if in_reproduction?
+      @is_moving = false
+    else
       make_decision
       process_view
       @is_moving = moving
-    else
-      @is_moving = false
     end
     @phenotype.update(@genotype, @is_moving)
   rescue DyingFromStarving
@@ -89,7 +85,7 @@ class Individual < GameObject
     "<#{@id} at #{@position}>:#{@phenotype.satiety}"
   end
 
-  def get_reproduction_pair
+  def reproduction_pair
     return nil if @reproduction_pair.empty?
 
     temp = @reproduction_pair
@@ -99,7 +95,8 @@ class Individual < GameObject
 
   def in_view_scope?(obj)
     if obj.instance_of?(Individual)
-      (@position.range(obj.position) - obj.phenotype.absolute_size / 2) <= @phenotype.view_scope
+      (@position.range(obj.position) - (obj.phenotype.absolute_size / 2)) <=
+        @phenotype.view_scope
     else
       @position.range(obj.position) <= @phenotype.view_scope
     end
@@ -128,17 +125,17 @@ class Individual < GameObject
   end
 
   private def set_reproduction_state
-    if @phenotype.age > @genotype.reproduction_gene
-      if @just_reproducted
-        @iterations_after_reproduction += 1
-        if @iterations_after_reproduction == S.iterations_after_reproducting
-          @just_reproducted = false
-          @iterations_after_reproduction = 0
-        end
-      elsif !@want_to_reproduct
-        @want_to_reproduct = true if Rand.happens_with_probability?(S.age_mutation_probability)
-        log "Want to reproduct (#{@phenotype.age})" if @want_to_reproduct
+    return if @phenotype.age <= @genotype.reproduction_gene
+
+    if @just_reproducted
+      @iterations_after_reproduction += 1
+      if @iterations_after_reproduction == S.iterations_after_reproducting
+        @just_reproducted = false
+        @iterations_after_reproduction = 0
       end
+    elsif !@want_to_reproduct
+      @want_to_reproduct = true if Rand.happens_with_probability?(S.age_mutation_probability)
+      log "Want to reproduct (#{@phenotype.age})" if @want_to_reproduct
     end
   end
 
@@ -186,9 +183,8 @@ class Individual < GameObject
   end
 
   private def generate_random_target
-    target = Rand.position
     # puts "Generate target = #{@position} -> #{target}, searching..."
-    target
+    Rand.position
   end
 
   private def have_business?
@@ -244,15 +240,17 @@ class Individual < GameObject
     end
   end
 
+  # rubocop:disable Style/GuardClause
   private def eat_transaction
     owner = @target.owner
     if owner == self || owner.nil? || !owner.stronger?(@phenotype.strength)
-      log "Eating #{@target}" #: #{owner} is weakly" if owner.class == Individual
+      log "Eating #{@target}" # : #{owner} is weakly" if owner.class == Individual
       feeding_operation if @target.try_to_eat self
-    else
+      # else
       # log "Can't eat #{@target} : #{owner} is stronger"
     end
   end
+  # rubocop:enable Style/GuardClause
 
   private def feeding_operation
     old_satiety = @phenotype.satiety

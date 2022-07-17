@@ -25,12 +25,15 @@ class Food < GameObject
     false
   end
 
+  # rubocop:disable Style/GuardClause
+  # TODO: think about it
   def update
     if @eaten
       # That's interesting
       @eaten = false
     end
   end
+  # rubocop:enable Style/GuardClause
 
   def try_to_eat(pretender)
     return false if @saturation.zero?
@@ -39,7 +42,7 @@ class Food < GameObject
     eat
   end
 
-  def draw
+  def draw # rubocop:disable Metrics/AbcSize
     size = @saturation / 2
 
     $env.draw_quad(

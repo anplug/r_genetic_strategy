@@ -21,7 +21,7 @@ class World
       ind.near_individuals = near_individuals(ind)
       ind.near_food = near_food(ind)
       ind.update(self)
-      reproduction_pair = ind.get_reproduction_pair
+      reproduction_pair = ind.reproduction_pair
       generate_new_individual(reproduction_pair) if reproduction_pair
       kill_individual(ind) if ind.is_dead
     end
@@ -91,9 +91,10 @@ class World
       @individuals += @new_individuals
       @new_individuals.clear
     end
-    if @dead_individuals.any?
-      @individuals -= @dead_individuals
-      @dead_individuals.clear
-    end
+
+    return if @dead_individuals.empty?
+
+    @individuals -= @dead_individuals
+    @dead_individuals.clear
   end
 end
