@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'native'
-
 class Position
   attr_accessor :x, :y
 
@@ -17,7 +15,7 @@ class Position
   end
 
   def range(other)
-    Native.range(x, other.x, y, other.y)
+    Math.sqrt((x - other.x) ** 2 + (y - other.y) ** 2);
   end
 
   def move(target, speed) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
